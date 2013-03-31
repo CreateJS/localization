@@ -58,9 +58,9 @@ var p = BitmapAnimation.prototype = new createjs.DisplayObject();
 // イベント:
 
 	/**
-	 * アニメーションが終了地点に達した時に発火されます。
+	 * アニメーションが終了地点に達した時に発行されます。
 	 * @event animationend
-	 * @param {Object} target イベントを発火したオブジェクトです。
+	 * @param {Object} target イベントを発行したオブジェクトです。
 	 * @param {String} type イベントのタイプです。
 	 * @param {String} name 終了したアニメーション名です。
 	 * @param {String} next 次に再生されるアニメーション名あるいはnullです。アニメーションがループしている時、これは現在のアニメーション名と同じものになります。
@@ -116,7 +116,7 @@ var p = BitmapAnimation.prototype = new createjs.DisplayObject();
 	p.spriteSheet = null;
 
 	/**
-	 * Bitmapをcanvasに描画するときにグローバルなピクセル座標として描画するか否かを指定します。
+	 * Bitmapをcanvasに描画するときにピクセル座標として描画するか否かを指定します。
 	 * @property snapToPixel
 	 * @type {Boolean}
 	 * @default true
@@ -360,7 +360,7 @@ var p = BitmapAnimation.prototype = new createjs.DisplayObject();
 
 
 	/**
-	 * 現在のフレーム番号を設定し、アニメーションを進め、コールバックを適切に発火します。
+	 * 現在のフレーム番号を設定し、アニメーションを進め、コールバックを適切に発行します。
 	 * @protected
 	 * @method _normalizeCurrentFrame
 	 **/
@@ -395,7 +395,7 @@ var p = BitmapAnimation.prototype = new createjs.DisplayObject();
 	}
 
 	/**
-	 * "animationend"イベントを発火します。
+	 * "animationend"イベントを発行します。
 	 * イベントハンドラがアニメーションを変化させた場合trueを返します。
 	 * (例: calling {{#crossLink "BitmapAnimation/stop"}}{{/crossLink}},
 	 * {{#crossLink "BitmapAnimation/gotoAndPlay"}}{{/crossLink}}, など。)
