@@ -61,7 +61,7 @@ var p = Bitmap.prototype = new createjs.DisplayObject();
 	p.image = null;
 
 	/**
-	 * Bitmapをcanvasに描画するときにグローバルなピクセル座標として描画するか否かを指定します。
+	 * Bitmapをcanvasに描画するときにピクセル座標にスナッピングするか否かを指定します。
 	 * @property snapToPixel
 	 * @type Boolean
 	 * @default true
