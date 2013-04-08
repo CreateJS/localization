@@ -372,10 +372,9 @@ var p = Container.prototype = new createjs.DisplayObject();
 	 * 表示オブジェクトのalpah、shadow、それとcompositeOperation、regX/Yを含んだ全ての変形系プロパティは無視して判定します。
 	 *
 	 * @method hitTest
-	 * @param {Number} x 表示オブジェクトのローカル座標系における点のx値
-	 * @param {Number} y 表示オブジェクトの座標系における点のy値
-	 * @return {Boolean} 指定した点の座標値において表示オブジェクトが可視か否か
-	 * coordinates.
+	 * @param {Number} x 表示オブジェクトのローカル座標系における点のx値です。
+	 * @param {Number} y 表示オブジェクトのローカル座標系における点のy値です。
+	 * @return {Boolean} DisplayObjectの可視な部分が指定されたローカルな点と交差しているか否かです。
 	 **/
 	p.hitTest = function(x, y) {
 		// TODO: optimize to use the fast cache check where possible.
