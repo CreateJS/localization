@@ -25,6 +25,7 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 * OTHER DEALINGS IN THE SOFTWARE.
 */
+
 // –¼‘O‹óŠÔ:
 this.createjs = this.createjs||{};
 
