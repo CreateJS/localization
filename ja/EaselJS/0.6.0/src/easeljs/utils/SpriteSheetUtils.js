@@ -26,16 +26,16 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// ���O���:
+// 名前空間:
 this.createjs = this.createjs||{};
 
 (function() {
-// �R���X�g���N�^:
+// コンストラクタ:
 /**
- * SpriteSheetUtils�N���X�́A{{#crossLink "SpriteSheet"}}{{/crossLink}}�Ƌ������ē��삷��ÓI���\�b�h�̏W���ł��B
- * �X�v���C�g�V�[�g�͘A�����������̉摜(�ʏ�̓A�j���[�V�����t���[���j���i�q��Ɉꖇ�̉摜�ɂ܂Ƃ߂�ꂽ���̂ł��B
- * �Ⴆ�΁A8����100x100 �̉摜�ɂ���č\�������A�j���[�V�����́A400x200�̃X�v���C�g�V�[�g�ɂ܂Ƃ߂邱�Ƃ��ł��܂��i4�t���[�����Ƃ�2��j�B
- * SpriteSheetUtils �N���X�͐ÓI�ȃC���^�[�t�F�[�X��񋟂��Ă���A�C���X�^���X�����ׂ��ł͂���܂���B
+ * SpriteSheetUtilsクラスは、{{#crossLink "SpriteSheet"}}{{/crossLink}}と協調して動作する静的メソッドの集合です。
+ * スプライトシートは連続した複数の画像(通常はアニメーションフレーム）が格子状に一枚の画像にまとめられたものです。
+ * 例えば、8枚の100x100 の画像によって構成されるアニメーションは、400x200のスプライトシートにまとめることができます（4フレームごとに2列）。
+ * SpriteSheetUtils クラスは静的なインターフェースを提供しており、インスタンス化すべきではありません。
  * @class SpriteSheetUtils
  * @static
  **/
@@ -61,24 +61,24 @@ var SpriteSheetUtils = function() {
 
 // public static methods:
 	/**
-	 * <b>����͎����I�ȃ��\�b�h�ł���A�����炭�o�O������܂��B��肪����Ε񍐂��Ă��������B</b><br/><br/>
-	 * �����̃X�v���C�g�V�[�g�ɑ΂��āA���̃t���[���𐅕������A���������A�܂��͗����ɔ��]����`�Ŋg�����܂��B
-	 * �܂��A�K�؂ȃA�j���[�V�����ƃt���[���̃f�[�^��ǉ����܂��B���]���ꂽ�A�j���[�V�����͌��X�̂��̂ɐړ������ǉ����ꂽ���O�������܂��i_h, _v, _hv ����K�؂Ȃ��́j�B
-	 * �X�v���C�g�V�[�g�̉摜�́A���̃��\�b�h���g�p����O�Ɋ��S�Ƀ��[�h�����悤�C��t���Ă��������B
+	 * <b>これは実験的なメソッドであり、おそらくバグがあります。問題があれば報告してください。</b><br/><br/>
+	 * 既存のスプライトシートに対して、元のフレームを水平方向、垂直方向、または両方に反転する形で拡張します。
+	 * また、適切なアニメーションとフレームのデータを追加します。反転されたアニメーションは元々のものに接頭辞が追加された名前を持ちます（_h, _v, _hv から適切なもの）。
+	 * スプライトシートの画像は、このメソッドを使用する前に完全にロードされるよう気を付けてください。
 	 * <br/><br/>
-	 * ��:<br/>
+	 * 例:<br/>
 	 * SpriteSheetUtils.addFlippedFrames(mySpriteSheet, true, true);
-	 * ��̗�ł́A���������ɔ��]���ꂽ�t���[���ƁA���������ɔ��]���ꂽ�t���[����ǉ����܂��B
+	 * 上の例では、水平方向に反転されたフレームと、垂直方向に反転されたフレームを追加します。
 	 * <br/><br/>
-	 * ���L�Ƃ��āA�S�Ă̕\���I�u�W�F�N�g�́AscaleX�܂���scaleY�v���p�e�B���}�C�i�X�ɐݒ肷�邱�Ƃł��A���]�����邱�Ƃ��ł��܂��B
-	 * ���̕��@�ł́A�������̃u���E�U�i���ɁA�n�[�h�E�F�A�A�N�Z�����[�g���ꂽCanvas�������Ȃ����́j�ł͎኱�p�t�H�[�}���X�Ɉ��e��������܂��B
-	 * ���̂��Ƃ��AaddFlippedFrames���g�p�ł���悤�ɂ��Ă��闝�R�ł��B
+	 * 注記として、全ての表示オブジェクトは、scaleXまたはscaleYプロパティをマイナスに設定することでも、反転させることができます。
+	 * この方法では、いくつかのブラウザ（特に、ハードウェアアクセラレートされたCanvasを持たないもの）では若干パフォーマンスに悪影響があります。
+	 * このことが、addFlippedFramesを使用できるようにしている理由です。
 	 * @method addFlippedFrames
 	 * @static
 	 * @param {SpriteSheet} spriteSheet 
-	 * @param {Boolean} horizontal true�̏ꍇ�A�����ɔ��]���ꂽ�t���[�����ǉ�����܂��B
-	 * @param {Boolean} vertical true�̏ꍇ�A�����ɔ��]���ꂽ�t���[�����ǉ�����܂��B
-	 * @param {Boolean} both true�̏ꍇ�A��������ѐ����ɔ��]���ꂽ�t���[�����ǉ�����܂��B
+	 * @param {Boolean} horizontal trueの場合、水平に反転されたフレームが追加されます。
+	 * @param {Boolean} vertical trueの場合、垂直に反転されたフレームが追加されます。
+	 * @param {Boolean} both trueの場合、水平および垂直に反転されたフレームが追加されます。
 	 **/
 	SpriteSheetUtils.addFlippedFrames = function(spriteSheet, horizontal, vertical, both) {
 		if (!horizontal && !vertical && !both) { return; }
@@ -90,15 +90,15 @@ var SpriteSheetUtils = function() {
 	}
 
 	/**
-	 * ����̃X�v���C�g�V�[�g����A1�t���[����V����PNG�摜�Ƃ��ĕԂ��܂��B
-	 * ���ӓ_�Ƃ��ẮA�قƂ�ǑS�Ă̏ꍇ�ɂ����āA���̕��@�ɂ��t���[���𕪊����ABitmap�C���X�^���X�Ƃ��ĕ\����������A
-	 * �ꎞ��~����BitmapAnimation�C���X�^���X��p�����ق������ǂ����ʂɂȂ�܂��B
+	 * 特定のスプライトシートから、1フレームを新しいPNG画像として返します。
+	 * 注意点としては、ほとんど全ての場合において、この方法によりフレームを分割し、Bitmapインスタンスとして表示するよりも、
+	 * 一時停止したBitmapAnimationインスタンスを用いたほうがより良い結果になります。
 	 * @method extractFrame
 	 * @static
-	 * @param {Image} spriteSheet �t���[���𒊏o���錳�ƂȂ�SpriteSheet�C���X�^���X
-	 * @param {Number} frame ���o�������t���[���ԍ��܂��̓A�j���[�V�������B
-	 * �A�j���[�V���������w�肳�ꂽ�ꍇ�A�A�j���[�V�������̍ŏ��̃t���[���݂̂����o����܂��B
-	 * @return {Image} ����̃X�v���C�g�V�[�g����1�t���[�����o���ꂽ�V����PNG�摜
+	 * @param {Image} spriteSheet フレームを抽出する元となるSpriteSheetインスタンス
+	 * @param {Number} frame 抽出したいフレーム番号またはアニメーション名。
+	 * アニメーション名が指定された場合、アニメーション中の最初のフレームのみが抽出されます。
+	 * @return {Image} 特定のスプライトシートから1フレーム抽出された新しいPNG画像
 	*/
 	SpriteSheetUtils.extractFrame = function(spriteSheet, frame) {
 		if (isNaN(frame)) {
@@ -117,16 +117,16 @@ var SpriteSheetUtils = function() {
 	}
 
 	/**
-	 * 1�摜��RGB�`�����l���ƁA�ʂ̉摜�̃A���t�@�`�����l�����������܂��B
-	 * ���̃��\�b�h�ł͐F�̃f�[�^���܂ވ��k���ꂽJPEG�摜�ƃA���t�@�`�����l�����܂ރ��m�N����PNG32�摜���g�p���邱�Ƃ��\�ł��B
-	 * ����̎�ނ̉摜�iJPEG���k�Ƃ��ă����_�����O�����悤�ȏڍׂ������j���g�p���邱�Ƃ́A�P�̂�RGBA��PNG32�`���摜�ɂ���ׂāA����ȃt�@�C���T�C�Y�̐ߖ�ɂȂ�܂��B
-	 * ���̃��\�b�h�͂ƂĂ������ł��i�ʏ�A���s�̓x��1�`2ms���x�j�B
+	 * 1画像のRGBチャンネルと、別の画像のアルファチャンネルを結合します。
+	 * このメソッドでは色のデータを含む圧縮されたJPEG画像とアルファチャンネルを含むモノクロのPNG32画像を使用することも可能です。
+	 * 特定の種類の画像（JPEG圧縮としてレンダリングされるような詳細を持つ物）を使用することは、単体のRGBAのPNG32形式画像にくらべて、多大なファイルサイズの節約になります。
+	 * このメソッドはとても高速です（通常、実行の度に1～2ms程度）。
 	 * @method mergeAlpha
 	 * @static
-	 * @param {Image} rbgImage RGB�`�����l�������摜�i�܂���Canvas�j�B
-	 * @param {Image} alphaImage �A���t�@�`�����l�������摜�i�܂���Canvas�j�B
-	 * @param {Canvas} canvas (�I�v�V����). �w�肵���ꍇ�A����Canvas���g�p����A�߂�l�Ƃ��ĕԂ���܂��B����ȊO�̏ꍇ�A�V����Canvas����������܂��B
-	 * @return {Canvas} �摜�f�[�^�ƌ������ꂽCanvas�B�����Bitmap��SpriteSheet�̃\�[�X�Ƃ��Ďg�p���邱�Ƃ��ł��܂��B
+	 * @param {Image} rbgImage RGBチャンネルを持つ画像（またはCanvas）。
+	 * @param {Image} alphaImage アルファチャンネルを持つ画像（またはCanvas）。
+	 * @param {Canvas} canvas (オプション). 指定した場合、そのCanvasが使用され、戻り値として返されます。それ以外の場合、新しいCanvasが生成されます。
+	 * @return {Canvas} 画像データと結合されたCanvas。これはBitmapやSpriteSheetのソースとして使用することができます。
 	*/
 	SpriteSheetUtils.mergeAlpha = function(rgbImage, alphaImage, canvas) {
 		if (!canvas) { canvas = createjs.createCanvas?createjs.createCanvas():document.createElement("canvas"); }

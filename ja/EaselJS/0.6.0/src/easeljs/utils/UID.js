@@ -26,13 +26,13 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// –¼‘O‹óŠÔ:
+// åå‰ç©ºé–“:
 this.createjs = this.createjs||{};
 
 (function() {
 
 /**
- * ˜A‘±‚µ‚½ƒ†ƒj[ƒN‚È(d•¡‚µ‚È‚¢)ID”Ô†‚ð¶¬‚·‚é‚½‚ß‚ÌƒOƒ[ƒoƒ‹ƒ†[ƒeƒBƒŠƒeƒB‚Å‚·BUIDƒNƒ‰ƒX‚ÍÃ“IƒCƒ“ƒ^[ƒtƒF[ƒX‚ðŽg—p‚µ(ex. <code>UID.get()</code>)AƒCƒ“ƒXƒ^ƒ“ƒX‰»‚·‚×‚«‚Å‚Í‚ ‚è‚Ü‚¹‚ñB
+ * é€£ç¶šã—ãŸãƒ¦ãƒ‹ãƒ¼ã‚¯ãª(é‡è¤‡ã—ãªã„)IDç•ªå·ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã§ã™ã€‚UIDã‚¯ãƒ©ã‚¹ã¯é™çš„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ä½¿ç”¨ã—(ex. <code>UID.get()</code>)ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã™ã¹ãã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  * @class UID
  * @static
  **/
@@ -48,9 +48,9 @@ var UID = function() {
 	UID._nextID = 0;
 
 	/**
-	 * ŽŸ‚Ìƒ†ƒj[ƒNID‚ð•Ô‹p‚µ‚Ü‚·B
+	 * æ¬¡ã®ãƒ¦ãƒ‹ãƒ¼ã‚¯IDã‚’è¿”å´ã—ã¾ã™ã€‚
 	 * @method get
-	 * @return {Number} ŽŸ‚Ìƒ†ƒj[ƒNID
+	 * @return {Number} æ¬¡ã®ãƒ¦ãƒ‹ãƒ¼ã‚¯ID
 	 * @static
 	 **/
 	UID.get = function() {
