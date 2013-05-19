@@ -3,7 +3,7 @@
 var Button = function(label, color) {
   this.initialize(label, color);
 }
-var p = Button.prototype = new createjs.Container(); // Container‚©‚çŒp³
+var p = Button.prototype = new createjs.Container(); // Containerã‹ã‚‰ç¶™æ‰¿
 
 p.label;
 p.background;
