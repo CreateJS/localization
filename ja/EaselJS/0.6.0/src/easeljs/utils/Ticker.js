@@ -26,24 +26,23 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// namespace:
+// 名前空間:
 this.createjs = this.createjs||{};
 
 (function() {
 
-// constructor:
+// コンストラクタ:
 /**
- * The Ticker provides  a centralized tick or heartbeat broadcast at a set interval. Listeners can subscribe to the tick
- * event to be notified when a set time interval has elapsed.
+ * Tickerは、設定した間隔による、一元的なtickまたはハートビートのブロードキャストを提供しています。
+ * リスナーは設定された時間間隔が経過したとき通知されるように、tickイベントを登録することができます。
  *
- * Note that the interval that the tick event is called is a target interval, and may be broadcast at a slower interval
- * during times of high CPU load. The Ticker class uses a static interface (ex. <code>Ticker.getPaused()</code>) and should not be
- * instantiated.
+ * 注意点として、tickイベントが呼び出される間隔は目標間隔であり、CPU負荷が高い場合、より遅い間隔でブロードキャストされるかもしれません。
+ * Tickerクラスは静的インターフェースを使用し(ex. <code>Ticker.getPaused()</code>)、インスタンス化すべきではありません。
  *
  * <h4>Example</h4>
  *      createjs.Ticker.addEventListener("tick", handleTick);
  *      function handleTick(event) {
- *          // Actions carried out each frame
+ *          // フレームごとにアクションが呼び出されます
  *      }
  * @class Ticker
  * @uses EventDispatcher
@@ -53,26 +52,25 @@ var Ticker = function() {
 	throw "Ticker cannot be instantiated.";
 }
 
-// events:
+// イベント:
 
 	/**
-	 * Dispatched each tick.
+	 * tickごとに送出されます。
 	 * @event tick
-	 * @param {Object} target The object that dispatched the event.
-	 * @param {String} type The event type.
-	 * @param {Boolean} paused Indicates whether the ticker is currently paused.
-	 * @param {Number} delta The time elapsed in ms since the last tick.
-	 * @param {Number} time The total time in ms since Ticker was initialized.
-	 * @param {Number} runTime The total time in ms that Ticker was not paused since it was initialized. For example,
-	 * 	you could determine the amount of time that the Ticker has been paused since initialization with time-runTime.
+	 * @param {Object} target イベントを送出するする対象のオブジェクト。
+	 * @param {String} type イベントタイプ。
+	 * @param {Boolean} paused 現在Tickerが一時停止中かどうかを示します。
+	 * @param {Number} delta 最後のtickから経過した時間（ms）。
+	 * @param {Number} time Tilcerが初期化されてからの合計時間（ms）。
+	 * @param {Number} runTime Tickerが初期化されてから、一時停止していない状態での合計時間(ms)。
+	 * 	例えば、Tickerが初期化されてから一時停止していた合計時間は、time-runtimeで求めることができます。
 	 * @since 0.6.0
 	 */
 
-// public static properties:
+// パブリック静的プロパティ:
 	/**
-	 * Indicates whether Ticker should use requestAnimationFrame if it is supported in the browser. If false, Ticker
-	 * will use setTimeout. If you use RAF, it is recommended that you set the framerate to a divisor of 60 (ex. 15,
-	 * 20, 30, 60).
+	 * requestAnimationFrameがブラウザでサポートされており、Tickerがそれを使用するべきかどうかを示します。falseの場合、TickerはsetTimeoutを使用します。
+	 * RAF(requestAnimationFrame)を使用する場合、フレームレートとして60を割った数を指定することが推奨されています(ex. 15, 20, 30, 60).
 	 * @property useRAF
 	 * @static
 	 * @type {Boolean}
@@ -80,17 +78,17 @@ var Ticker = function() {
 	 **/
 	Ticker.useRAF = false;
 	
-// mix-ins:
-	// EventDispatcher methods:
+// ミックスイン:
+	// EventDispatcher メソッド:
 	Ticker.addEventListener = null;
 	Ticker.removeEventListener = null;
 	Ticker.removeAllEventListeners = null;
 	Ticker.dispatchEvent = null;
 	Ticker.hasEventListener = null;
 	Ticker._listeners = null;
-	createjs.EventDispatcher.initialize(Ticker); // inject EventDispatcher methods.
+	createjs.EventDispatcher.initialize(Ticker); // EventDispatcher メソッドを注入する。
 	
-// private static properties:
+// プライベート静的プロパティ:
 
 	
 	/** 
@@ -136,7 +134,7 @@ var Ticker = function() {
 	Ticker._pausedTime=0;
 	
 	/** 
-	 * Number of ticks that have passed
+	 * すでに経過したtick数
 	 * @property _ticks
 	 * @type {Number}
 	 * @protected 
@@ -144,7 +142,7 @@ var Ticker = function() {
 	Ticker._ticks = 0;
 	
 	/**
-	 * Number of ticks that have passed while Ticker has been paused
+	 * Tickerが一時停止中に経過したtick数
 	 * @property _pausedTicks
 	 * @type {Number}
 	 * @protected 
@@ -156,7 +154,7 @@ var Ticker = function() {
 	 * @type {Number}
 	 * @protected 
 	 **/
-	Ticker._interval = 50; // READ-ONLY
+	Ticker._interval = 50; // リードオンリー
 	
 	/** 
 	 * @property _lastTime
@@ -194,19 +192,18 @@ var Ticker = function() {
 	Ticker._timeoutID = null;
 	
 	
-// public static methods:
+// パブリック静的メソッド:
 	/**
-	 * Adds a listener for the tick event. The listener must be either an object exposing a <code>tick</code> method,
-	 * or a function. The listener will be called once each tick / interval. The interval is specified via the 
-	 * .setInterval(ms) method.
-	 * The tick method or function is passed two parameters: the elapsed time between the 
-	 * previous tick and the current one, and a boolean indicating whether Ticker is paused.
+	 * tickイベントのリスナーを追加します。リスナーはtickメソッドを公開しているオブジェクト、または関数でなければなりません。
+	 * リスナーは各tick / 間隔ごとに1度呼び出されます。この間隔は.setInterval(ms)メソッドによって指定されます。
+	 * tickメソッドまたは関数には、2つのパラメータが渡されます。
+	 * 前回のtickから今回までの経過時間とTickerが一時停止中かどうかを示すBoolean値です。
 	 * @method addListener
 	 * @static
-	 * @param {Object} o The object or function to add as a listener.
-	 * @param {Boolean} pauseable If false, the listener will continue to have tick called 
-	 * even when Ticker is paused via Ticker.pause(). Default is true.
-	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
+	 * @param {Object} o リスナーとして追加するオブジェクト、または関数。
+	 * @param {Boolean} pauseable falseの場合、TickerがTicker.pause()によって一時停止している場合でも、
+	 * リスナーは継続して呼び出されます。デフォルト値はtrueです。
+	 * @deprecated "tick" イベントの採用のため。将来のバージョンで削除されます。
 	 **/
 	Ticker.addListener = function(o, pauseable) {
 		if (o == null) { return; }
@@ -216,8 +213,8 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Initializes or resets the timer, clearing all associated listeners and fps measuring data, starting the tick.
-	 * This is called automatically when the first listener is added.
+	 * 初期化、またはタイマーをリセットして、全ての関連するリスナー、FPS測定データ、起動中のtickをクリアします。
+	 * 最初のリスナーが登録された際、自動的に呼び出されます。
 	 * @method init
 	 * @static
 	 **/
@@ -232,11 +229,11 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Removes the specified listener.
+	 * 指定したリスナーを削除します。
 	 * @method removeListener
 	 * @static
-	 * @param {Object} o The object or function to remove from listening from the tick event.
-	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
+	 * @param {Object} o tickイベントのリスナーとなっているオブジェクト、またはメソッド。
+	 * @deprecated "tick" イベントの採用のため。将来のバージョンで削除されます。
 	 **/
 	Ticker.removeListener = function(o) {
 		var listeners = Ticker._listeners;
@@ -249,10 +246,10 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Removes all listeners.
+	 * 全てのリスナーを削除します。
 	 * @method removeAllListeners
 	 * @static
-	 * @deprecated In favour of the "tick" event. Will be removed in a future version.
+	 * @deprecated "tick" イベントの採用のため。将来のバージョンで削除されます。
 	 **/
 	Ticker.removeAllListeners = function() {
 		Ticker._listeners = [];
@@ -260,11 +257,11 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Sets the target time (in milliseconds) between ticks. Default is 50 (20 FPS).
-	 * Note actual time between ticks may be more than requested depending on CPU load.
+	 * tickごとの間隔となる目標時間(ms)を設定します。デフォルト値は50です（20 FPS）。
+	 * 注意点として、tickごとの実際の時間はCPUの処理に依存し、設定値よりも大きくなるかもしれません。
 	 * @method setInterval
 	 * @static
-	 * @param {Number} interval Time in milliseconds between ticks. Default value is 50.
+	 * @param {Number} interval tickごとの時間(ms)。デフォルト値は50です。
 	 **/
 	Ticker.setInterval = function(interval) {
 		Ticker._interval = interval;
@@ -273,105 +270,100 @@ var Ticker = function() {
 	}
 	
 	/**
-	 * Returns the current target time between ticks, as set with setInterval.
+	 * tickごとの時間間隔について、現在の目標時間を返します。
 	 * @method getInterval
 	 * @static
-	 * @return {Number} The current target interval in milliseconds between tick events.
+	 * @return {Number} tickイベント間の、現在の目標時間間隔(ms)。
 	 **/
 	Ticker.getInterval = function() {
 		return Ticker._interval;
 	}
 	
 	/**
-	 * Sets the target frame rate in frames per second (FPS). For example, with an interval of 40, getFPS() will 
-	 * return 25 (1000ms per second divided by 40 ms per tick = 25fps).
+	 * 1秒ごとの目標フレームレート(FPS)を設定します。 例えば、40msの間隔の場合、getFPS()は 25 を返します(1000ms / 40ms = 25fps)。
 	 * @method setFPS
 	 * @static
-	 * @param {Number} value Target number of ticks broadcast per second.
+	 * @param {Number} value 1秒ごとにブロードキャストされる目標tick数
 	 **/	
 	Ticker.setFPS = function(value) {
 		Ticker.setInterval(1000/value);
 	}
 	
 	/**
-	 * Returns the target frame rate in frames per second (FPS). For example, with an 
-	 * interval of 40, getFPS() will return 25 (1000ms per second divided by 40 ms per tick = 25fps).
+	 * 1秒ごとの目標フレームレート(FPS)を返します。例えば、40msの間隔の場合、getFPS()は 25 を返します(1000ms / 40ms = 25fps)。
 	 * @method getFPS
 	 * @static
-	 * @return {Number} The current target number of frames / ticks broadcast per second.
+	 * @return {Number} 現在の、1秒ごとにブロードキャストされる目標tick数
 	 **/
 	Ticker.getFPS = function() {
 		return 1000/Ticker._interval;
 	}
 	
 	/**
-	 * Returns the actual frames / ticks per second.
+	 * 実測による、1秒ごとの tick数を返します。
 	 * @method getMeasuredFPS
 	 * @static
-	 * @param {Number} ticks Optional. The number of previous ticks over which to measure the actual 
-	 * frames / ticks per second. Defaults to the number of ticks per second.
-	 * @return {Number} The actual frames / ticks per second. Depending on performance, this may differ
-	 * from the target frames per second.
+	 * @param {Number} ticks （オプション） 実測による1秒ごとのtick数を計算する際に使用する、過去のtick数。 デフォルト値は1秒ごとのtick数。
+	 * @return {Number} 実測による、1秒ごとのtick数。パフォーマンスの影響を受けるため、これは目標FPSとは異なるかもしれません。
 	 **/
 	Ticker.getMeasuredFPS = function(ticks) {
 		if (Ticker._times.length < 2) { return -1; }
 		
-		// by default, calculate fps for the past 1 second:
+		// デフォルトでは、過去の1秒間のfpsを計算する:
 		if (ticks == null) { ticks = Ticker.getFPS()|0; }
 		ticks = Math.min(Ticker._times.length-1, ticks);
 		return 1000/((Ticker._times[0]-Ticker._times[ticks])/ticks);
 	}
 	
 	/**
-	 * While Ticker is paused, pausable listeners are not ticked. See addListener for more information.
+	 * Tickerが一時停止中の場合、pausableなリスナーはイベントを受け取りません。詳細はaddListenerを参照してください。
 	 * @method setPaused
 	 * @static
-	 * @param {Boolean} value Indicates whether to pause (true) or unpause (false) Ticker.
+	 * @param {Boolean} value Tickerが一時停止（true）または非停止（false）のどちらかを示します。
 	 **/
 	Ticker.setPaused = function(value) {
 		Ticker._paused = value;
 	}
 	
 	/**
-	 * Returns a boolean indicating whether Ticker is currently paused, as set with setPaused.
+	 * TickerがsetPausedの呼び出しにより、現在一時停止しているかどうかを、真偽値で返します。
 	 * @method getPaused
 	 * @static
-	 * @return {Boolean} Whether the Ticker is currently paused.
+	 * @return {Boolean} Tickerが現在一時停止しているかどうか。
 	 **/
 	Ticker.getPaused = function() {
 		return Ticker._paused;
 	}
 	
 	/**
-	 * Returns the number of milliseconds that have elapsed since Ticker was initialized.
-	 * For example, you could use this in a time synchronized animation to determine the exact amount of 
-	 * time that has elapsed.
+	 * ティッカーが初期化されてからの経過秒数(ms)を返します。
+	 * 例えば、時間と同期したアニメーションにおいて、経過した時間の正確な量を求めるためにこれを使用することができます。
 	 * @method getTime
 	 * @static
-	 * @param {Boolean} runTime If true only time elapsed while Ticker was not paused will be returned.
-	 * If false, the value returned will be total time elapsed since the first tick event listener was added.
-	 * The default value is false.
-	 * @return {Number} Number of milliseconds that have elapsed since Ticker was initialized.
+	 * @param {Boolean} runTime trueの場合、Tickerが一時停止していない間の経過時間のみが返されます。
+	 * falseの場合、tickイベントのリスナーが追加されてからの、全ての経過時間が返されます。
+	 * デフォルト値はfalseです。
+	 * @return {Number} Tickerが初期化されてからの経過時間(ms)。
 	 **/
 	Ticker.getTime = function(runTime) {
 		return Ticker._getTime() - Ticker._startTime - (runTime ? Ticker._pausedTime : 0);
 	}
 	
 	/**
-	 * Returns the number of ticks that have been broadcast by Ticker.
+	 * Tickerによってブロードキャストされたtickの数を返します。
 	 * @method getTicks
 	 * @static
-	 * @param {Boolean} pauseable Indicates whether to include ticks that would have been broadcast
-	 * while Ticker was paused. If true only tick events broadcast while Ticker is not paused will be returned.
-	 * If false, tick events that would have been broadcast while Ticker was paused will be included in the return
-	 * value. The default value is false.
-	 * @return {Number} of ticks that have been broadcast.
+	 * @param {Boolean} pauseable Tickerが一時停止している間にブロードキャストされていたtickを含めるかどうかを示します。
+	 * trueの場合、Tickerが一時停止していない間に発生したtickイベントの数のみが返されます。
+	 * falseの場合、Tickerが一時停止している間に発生したtickイベントによる数も、戻り値に含まれます。
+	 * デフォルト値はfalseです。
+	 * @return {Number} これまでにブロードキャストされたtickの数を返します。
 	 **/
 	Ticker.getTicks = function(pauseable) {
 		return  Ticker._ticks - (pauseable ?Ticker._pausedTicks : 0);
 	}
 	
-// private static methods:
+// プライベート静的メソッド:
 	/**
 	 * @method _handleAF
 	 * @protected
@@ -379,7 +371,7 @@ var Ticker = function() {
 	Ticker._handleAF = function() {
 		Ticker._rafActive = false;
 		Ticker._setupTick();
-		// run if enough time has elapsed, with a little bit of flexibility to be early, because RAF seems to run a little faster than 60hz:
+		// RAFは60Hzよりも若干速く実行されているように見えるため、少しだけ進み気味の調整をした状態で、十分な時間が経過すると実行される:
 		if (Ticker._getTime() - Ticker._lastTime >= (Ticker._interval-1)*0.97) {
 			Ticker._tick();
 		}
