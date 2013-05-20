@@ -905,22 +905,19 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a star if pointSize is greater than 0, or a regular polygon if pointSize is 0 with the specified number of
-	 * points. For example, the following code will draw a familiar 5 pointed star shape centered at 100, 100 and with a
-	 * radius of 50:
+	 * ポイントサイズが0より大きい場合は星型、またはポイントサイズが0である場合は指定した頂点数の正多角形を描画します。
+	 * 例えば、次のコードでは中心が100、100、半径が50の、慣れ親しんだ五芒星のシェイプを描画します：
 	 *      myGraphics.beginFill("#FF0").drawPolyStar(100, 100, 50, 5, 0.6, -90);
-	 *      // Note: -90 makes the first point vertical
+	 *      // 注意: -90では最初の点が垂直になります
 	 *
 	 * @method drawPolyStar
-	 * @param {Number} x Position of the center of the shape.
-	 * @param {Number} y Position of the center of the shape.
-	 * @param {Number} radius The outer radius of the shape.
-	 * @param {Number} sides The number of points on the star or sides on the polygon.
-	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will draw a regular
-	 * polygon (no points), a pointSize of 1 will draw nothing because the points are infinitely pointy.
-	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will draw the first point
-	 * directly to the right of the center.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} シェイプの中心のx座標。
+	 * @param {Number} シェイプの中心のy座標。
+	 * @param {Number} radius シェイプの外半径。
+	 * @param {Number} sides 星、または多角形の側面にある点の数。
+	 * @param {Number} pointSize 星の各点の尖り具合（谷）の深さ。pointSizeが0の場合、正多角形が描画されます(谷がない), pointSizeが1の場合、無限に尖っていることになるため、なにも描画されません。
+	 * @param {Number} angle 最初の点/コーナーの角度。 例えば0の場合は、中央の右側にある最初の点が直接描画されます。
+	 * @return {Graphics} メソッドが呼び出されたGraphicインスタンス (連鎖した呼び出しに有用)。
 	 **/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
 		this._dirty = this._active = true;
@@ -943,32 +940,32 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Decodes a compact encoded path string into a series of draw instructions.
-	 * This format is not intended to be human readable, and is meant for use by authoring tools.
-	 * The format uses a base64 character set, with each character representing 6 bits, to define a series of draw commands.
+	 * 圧縮されたエンコードパスの文字列を、連続した描画命令にデコードします。
+	 * このフォーマットは人間が読み取ることを意図しておらず、オーサリングツールで使用されます。
+	 * このフォーマットではbase64文字セットを使用しています。各文字は連続する描画命令を定義するための6ビット文字に変換されます。
 	 *
-	 * Each command is comprised of a single "header" character followed by a variable number of alternating x and y position values.
-	 * Reading the header bits from left to right (most to least significant): bits 1 to 3 specify the type of operation
-	 * (0-moveTo, 1-lineTo, 2-quadraticCurveTo, 3-bezierCurveTo, 4-closePath, 5-7 unused). Bit 4 indicates whether position values use 12 bits (2 characters) 
-	 * or 18 bits (3 characters), with a one indicating the latter. Bits 5 and 6 are currently unused.
+	 * 各コマンドは、単一の"ヘッダー"文字と、それに続くxおよびy座標の値を交互に繋げた変数から構成された文字列に圧縮されます。
+	 * ヘッダービットは左から右へ読みます(ほとんどの場合は右端ビットまで):1～3ビットは、操作の種類を指定します。
+	 * (0-moveTo, 1-lineTo, 2-quadraticCurveTo, 3-bezierCurveTo, 4-closePath, 5-7 未使用)
+	 * ビット4は座標の値に12ビット（2文字）または18ビット(3文字)のどちらを使用するかを示します。5と6のビットは現在未使用です。
 	 *
-	 * Following the header is a series of 0 (closePath), 2 (moveTo, lineTo), 4 (quadraticCurveTo), or 6 (bezierCurveTo) parameters.
-	 * These parameters are alternating x/y positions represented by 2 or 3 characters (as indicated by the 4th bit in the command char).
-	 * These characters consist of a 1 bit sign (1 is negative, 0 is positive), followed by an 11 (2 char) or 17 (3 char) bit integer value.
-	 * All position values are in tenths of a pixel.
-	 * Except in the case of move operations which are absolute, this value is a delta from the previous x or y position (as appropriate).
+	 * ヘッダに続くのは、0（closePath）、2（moveTo, LINETO）、4（quadraticCurveTo）、または6（bezierCurveTo）のパラメータです。
+	 * これらのパラメータは、2または3文字によって表される（コマンド文字のビット4で示されます）、x/y座標を交互に並べたものです。
+	 * これらの文字は、1ビットの符号（1は負、0が正）と、それに続く11（2文字）または17（3文字）ビットの整数値から構成されています。
+	 * 全ての座標値は、1ピクセルの1/10の単位です。
+	 * 絶対値による移動操作の場合を除き、この値は、以前のxまたはy位置からの相対値です（適切なものが選択されます）。
 	 *
-	 * For example, the string "A3cAAMAu4AAA" represents a line starting at -150,0 and ending at 150,0.
-	 * <br />A - bits 000000. First 3 bits (000) indicate a moveTo operation. 4th bit (0) indicates 2 chars per parameter.
-	 * <br />n0 - 110111011100. Absolute x position of -150.0px. First bit indicates a negative value, remaining bits indicate 1500 tenths of a pixel.
-	 * <br />AA - 000000000000. Absolute y position of 0.
-	 * <br />I - 001100. First 3 bits (001) indicate a lineTo operation. 4th bit (1) indicates 3 chars per parameter.
-	 * <br />Au4 - 000000101110111000. An x delta of 300.0px, which is added to the previous x value of -150.0px to provide an absolute position of +150.0px.
-	 * <br />AAA - 000000000000000000. A y delta value of 0.
+	 * 例えば、"A3cAAMAu4AAA"の文字列は、-150,0から始まり150,0で終わる直線を表します。
+	 * <br />A - bits 000000. 最初の3ビット(000)はmoveTo命令を示します。ビット4(0)はパラメータごとに2文字であることを示します。
+	 * <br />n0 - 110111011100. xの絶対値は-150.0pxです。最初のビットは負の値であることを示し、残りのビット列は1ピクセルの1/10の単位で1500であることを示します。
+	 * <br />AA - 000000000000. yの絶対座標は0です。
+	 * <br />I - 001100. 最初の3ビット(001)はlineTo命令を示します。ビット4(1)はパラメータごとに3文字であることを示します。
+	 * <br />Au4 - 000000101110111000. xの相対値は300.0pxです。これは前のx座標である-150.0pxに加算され、絶対座標では+150.0pxになります。
+	 * <br />AAA - 000000000000000000. yの相対値は0です。
 	 * 
 	 * @method decodePath
-	 * @param {String} str The path string to decode.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {String} str デコードするパス文字列。
+	 * @return {Graphics} メソッドが呼び出されたGraphicインスタンス (連鎖した呼び出しに有用)。
 	 **/
 	p.decodePath = function(str) {
 		var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo, this.closePath];
@@ -1007,9 +1004,9 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Returns a clone of this Graphics instance.
+	 * Graphicsインスタンスの複製を返します。
 	 * @method clone
-	 * @return {Graphics} A clone of the current Graphics instance.
+	 * @return {Graphics} 現在のGraphicsインスタンスの複製。
 	 **/
 	p.clone = function() {
 		var o = new Graphics();
@@ -1025,199 +1022,199 @@ var p = Graphics.prototype;
 	};
 		
 	/**
-	 * Returns a string representation of this object.
+	 * このオブジェクトの文字列表現を返します。
 	 * @method toString
-	 * @return {String} a string representation of the instance.
+	 * @return {String} このインスタンスの文字列表現。
 	 **/
 	p.toString = function() {
 		return "[Graphics]";
 	};
 	
 	
-// tiny API:
-	/** Shortcut to moveTo.
+// 小さいAPI:
+	/** moveToへのショートカット。
 	 * @method mt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.mt = p.moveTo;
 	
-	/** Shortcut to lineTo.
+	/** lineToへのショートカット。
 	 * @method lt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.lt = p.lineTo;
 	
-	/** Shortcut to arcTo.
+	/** arcToへのショートカット。
 	 * @method at
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.at = p.arcTo;
 	
-	/** Shortcut to bezierCurveTo.
+	/** bezierCurveToへのショートカット。
 	 * @method bt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bt = p.bezierCurveTo;
 	
-	/** Shortcut to quadraticCurveTo / curveTo.
+	/** quadraticCurveTo / curveToへのショートカット。
 	 * @method qt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.qt = p.quadraticCurveTo;
 	
-	/** Shortcut to arc.
+	/** arcへのショートカット。
 	 * @method a
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.a = p.arc;
 	
-	/** Shortcut to rect.
+	/** rectへのショートカット。
 	 * @method r
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.r = p.rect;
 	
-	/** Shortcut to closePath.
+	/** closePathへのショートカット。
 	 * @method cp
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.cp = p.closePath;
 	
-	/** Shortcut to clear.
+	/** clearへのショートカット。
 	 * @method c
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.c = p.clear;
 	
-	/** Shortcut to beginFill.
+	/** beginFillへのショートカット。
 	 * @method f
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.f = p.beginFill;
 	
-	/** Shortcut to beginLinearGradientFill.
+	/** beginLinearGradientFillへのショートカット。
 	 * @method lf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.lf = p.beginLinearGradientFill;
 	
-	/** Shortcut to beginRadialGradientFill.
+	/** beginRadialGradientFillへのショートカット。
 	 * @method rf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rf = p.beginRadialGradientFill;
 	
-	/** Shortcut to beginBitmapFill.
+	/** beginBitmapFillへのショートカット。
 	 * @method bf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bf = p.beginBitmapFill;
 	
-	/** Shortcut to endFill.
+	/** endFillへのショートカット。
 	 * @method ef
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ef = p.endFill;
 	
-	/** Shortcut to setStrokeStyle.
+	/** setStrokeStyleへのショートカット。
 	 * @method ss
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ss = p.setStrokeStyle;
 	
-	/** Shortcut to beginStroke.
+	/** beginStrokeへのショートカット。
 	 * @method s
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.s = p.beginStroke;
 	
-	/** Shortcut to beginLinearGradientStroke.
+	/** beginLinearGradientStrokeへのショートカット。
 	 * @method ls
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ls = p.beginLinearGradientStroke;
 	
-	/** Shortcut to beginRadialGradientStroke.
+	/** beginRadialGradientStrokeへのショートカット。
 	 * @method rs
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rs = p.beginRadialGradientStroke;
 	
-	/** Shortcut to beginBitmapStroke.
+	/** beginBitmapStrokeへのショートカット。
 	 * @method bs
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bs = p.beginBitmapStroke;
 	
-	/** Shortcut to endStroke.
+	/** endStrokeへのショートカット。
 	 * @method es
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.es = p.endStroke;
 	
-	/** Shortcut to drawRect.
+	/** drawRectへのショートカット。
 	 * @method dr
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dr = p.drawRect;
 	
-	/** Shortcut to drawRoundRect.
+	/** drawRoundRectへのショートカット。
 	 * @method rr
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rr = p.drawRoundRect;
 	
-	/** Shortcut to drawRoundRectComplex.
+	/** drawRoundRectComplexへのショートカット。
 	 * @method rc
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rc = p.drawRoundRectComplex;
 	
-	/** Shortcut to drawCircle.
+	/** drawCircleへのショートカット。
 	 * @method dc
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dc = p.drawCircle;
 	
-	/** Shortcut to drawEllipse.
+	/** drawEllipseへのショートカット。
 	 * @method de
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.de = p.drawEllipse;
 	
-	/** Shortcut to drawPolyStar.
+	/** drawPolyStarへのショートカット。
 	 * @method dp
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dp = p.drawPolyStar;
 	
-	/** Shortcut to decodePath.
+	/** decodePathへのショートカット。
 	 * @method p
 	 * @protected
 	 * t@ype Function
@@ -1225,7 +1222,7 @@ var p = Graphics.prototype;
 	p.p = p.decodePath;
 	
 	
-// private methods:
+// プライベートメソッド:
 	/**
 	 * @method _updateInstructions
 	 * @protected
@@ -1266,9 +1263,9 @@ var p = Graphics.prototype;
 		this._active = this._dirty = false;
 	};
 	
-	// used to create Commands that set properties:
+	// プロパティを設定するコマンドの作成に使用します:
 	/**
-	 * Used to create Commands that set properties
+	 * プロパティを設定するコマンドの作成に使用します
 	 * @method _setProp
 	 * @param {String} name
 	 * @param {String} value
