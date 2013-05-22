@@ -26,13 +26,13 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// ���O���:
+// 名前空間:
 this.createjs = this.createjs||{};
 
 (function() {
 
 /**
-* Inner class used by the {{#crossLink "Graphics"}}{{/crossLink}} class. Used to create the instruction lists used in Graphics:
+* Graphicsクラスで使用される内部クラスです。Graphics内の命令リストを作成するために使用されます。
 * @class Command
 * @protected
 * @constructor
@@ -51,10 +51,9 @@ function Command(f, params, path) {
 Command.prototype.exec = function(scope) { this.f.apply(scope, this.params); }
 
 /**
- * The Graphics class exposes an easy to use API for generating vector drawing instructions and drawing them to a
- * specified context. Note that you can use Graphics without any dependency on the Easel framework by calling {{#crossLink "DisplayObject/draw"}}{{/crossLink}}
- * directly, or it can be used with the {{#crossLink "Shape"}}{{/crossLink}} object to draw vector graphics within the
- * context of an Easel display list.
+ * Graphicsクラスは、ベクター描画命令を生成して指定したコンテクストに描画するための、容易に使用できるAPIを提供します。
+ * 注意点として、Graphicsは{{#crossLink "DisplayObject/draw"}}{{/crossLink}}を直接呼び出すことにより、Easelフレームワークに依存せず使用することができますし、
+ * {{#crossLink "Shape"}}{{/crossLink}}オブジェクトを使用してEaselの表示オブジェクトのコンテクスト内でベクターグラフィックスを描画することも可能です。
  *
  * <h4>Example</h4>
  *      var g = new Graphics();
@@ -70,20 +69,18 @@ Command.prototype.exec = function(scope) { this.f.apply(scope, this.params); }
  *	    stage.addChild(s);
  *	    stage.update();
  *
- * Note that all drawing methods in Graphics return the Graphics instance, so they can be chained together. For example,
- * the following line of code would generate the instructions to draw a rectangle with a red stroke and blue fill, then
- * render it to the specified context2D:
+ * 注意点として、Graphicsの全ての描画メソッドはGraphicsインスタンスを返すので、お互いに連鎖させることができます。
+ * 例えば下のコードは赤い線、青の塗りつぶしの矩形を描画する命令を生成した後、指定したcontext2Dに表示しています:
  *
  *      myGraphics.beginStroke("#F00").beginFill("#00F").drawRect(20, 20, 100, 50).draw(myContext2D);
  *
- * <h4>Tiny API</h4>
- * The Graphics class also includes a "tiny API", which is one or two-letter methods that are shortcuts for all of the
- * Graphics methods. These methods are great for creating compact instructions, and is used by the Toolkit for CreateJS
- * to generate readable code. All tiny methods are marked as protected, so you can view them by enabling protected
- * descriptions in the docs.
+ * <h4>短縮版 API</h4>
+ * Graphicsクラスはまた"短縮版 API"を含んでおり、これはGraphicsの全てのメソッドへのショートカットである1または2文字のメソッド群です。
+ * これらのメソッドはコンパクトな命令を作成するために重要で、Toolkit for CreateJSで可読性のあるコードを生成するために使用されます。
+ * 全ての短縮版メソッドはprotectedとして記述されているため、ドキュメント中ではprotectedについての説明を有効にすることで閲覧することができます。
  *
  * <table>
- *     <tr><td><b>Tiny</b></td><td><b>Method</b></td><td><b>Tiny</b></td><td><b>Method</b></td></tr>
+ *     <tr><td><b>Tiny</b></td><td><b>メソッド</b></td><td><b>短縮版</b></td><td><b>Method</b></td></tr>
  *     <tr><td>mt</td><td>{{#crossLink "Graphics/moveTo"}}{{/crossLink}} </td>
  *     <td>lt</td> <td>{{#crossLink "Graphics/lineTo"}}{{/crossLink}}</td></tr>
  *     <tr><td>at</td><td>{{#crossLink "Graphics/arcTo"}}{{/crossLink}} </td>
@@ -112,7 +109,7 @@ Command.prototype.exec = function(scope) { this.f.apply(scope, this.params); }
  *     <td>p</td><td>{{#crossLink "Graphics/decodePath"}}{{/crossLink}} </td></tr>
  * </table>
  *
- * Here is the above example, using the tiny API instead.
+ * ここでは上記の実例として, 短縮版APIを代用しています。
  *
  *      myGraphics.s("#F00").f("#00F").r(20, 20, 100, 50).draw(myContext2D);
  *
@@ -125,29 +122,29 @@ var Graphics = function() {
 };
 var p = Graphics.prototype;
 
-// static public methods:
+// 静的パブリックメソッド:
 	
 	
 	/**
-	 * Returns a CSS compatible color string based on the specified RGB numeric color values in the format 
-	 * "rgba(255,255,255,1.0)", or if alpha is null then in the format "rgb(255,255,255)". For example,
+	 * 指定されたRGBカラー数値に基づいて、"rgba(255,255,255,1.0)"形式、
+	 * または透明度がnullの場合は"rgb(255,255,255)"の形式で、CSSと互換性のある色の文字列を返します。例えば、
 	 *
 	 *      Graphics.getRGB(50, 100, 150, 0.5);
 	 *
-	 * will return "rgba(50,100,150,0.5)". It also supports passing a single hex color value as the first param, and an
-	 * optional alpha value as the second param. For example,
+	 * は"rgba(50,100,150,0.5)"を返します。また、最初のパラメータとして単体の16進数カラー値、
+	 * 2番目のパラメータとして透明度(オプション)の受け渡しもサポートします。例えば、
 	 *
 	 *      Graphics.getRGB(0xFF00FF, 0.2);
 	 *
-	 * will return "rgba(255,0,255,0.2)".
+	 * は"rgba(255,0,255,0.2)"を返します。
 	 * @method getRGB
 	 * @static
-	 * @param {Number} r The red component for the color, between 0 and 0xFF (255).
-	 * @param {Number} g The green component for the color, between 0 and 0xFF (255).
-	 * @param {Number} b The blue component for the color, between 0 and 0xFF (255).
-	 * @param {Number} alpha Optional. The alpha component for the color where 0 is fully transparent and 1 is fully opaque.
-	 * @return {String} A CSS compatible color string based on the specified RGB numeric color values in the format 
-	 * "rgba(255,255,255,1.0)", or if alpha is null then in the format "rgb(255,255,255)".
+	 * @param {Number} r 0から0xFF(255)の間の、色の赤成分。
+	 * @param {Number} g 0から0xFF(255)の間の、色の緑成分。
+	 * @param {Number} b 0から0xFF(255)の間の、色の青成分。
+	 * @param {Number} （オプション） 0が完全に透明から、1が完全に不透明の間の、色の透明度。
+	 * @return {String} 指定されたRGBカラー数値に基づいた、"rgba(255,255,255,1.0)"形式、
+	 * または透明度がnullの場合は"rgb(255,255,255)"の形式で、CSSと互換性のある色の文字列
 	 **/
 	Graphics.getRGB = function(r, g, b, alpha) {
 		if (r != null && b == null) {
@@ -164,19 +161,20 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Returns a CSS compatible color string based on the specified HSL numeric color values in the format "hsla(360,100,100,1.0)", 
-	 * or if alpha is null then in the format "hsl(360,100,100)". For example, this will return "hsl(150,100,70)".
+	 * 指定されたHSLカラー数値に基づいて、"hsla(360,100,100,1.0)"形式、
+	 * または透明度がnullの場合は"hsl(360,100,100)"の形式で、CSSと互換性のある色の文字列を返します。
+	 * 例えば、以下の場合は"hsl(150,100,70)"を返します。
 	 *
 	 *      Graphics.getHSL(150, 100, 70);
 	 *
 	 * @method getHSL
 	 * @static
-	 * @param {Number} hue The hue component for the color, between 0 and 360.
-	 * @param {Number} saturation The saturation component for the color, between 0 and 100.
-	 * @param {Number} lightness The lightness component for the color, between 0 and 100.
-	 * @param {Number} alpha Optional. The alpha component for the color where 0 is fully transparent and 1 is fully opaque.
-	 * @return {String} A CSS compatible color string based on the specified HSL numeric color values in the format 
-	 * "hsla(360,100,100,1.0)", or if alpha is null then in the format "hsl(360,100,100)".
+	 * @param {Number} hue 0から360までの、色の色相。
+	 * @param {Number} saturation 0から100までの、色の彩度。
+	 * @param {Number} lightness 0から100までの、色の明度。
+	 * @param {Number} alpha (オプション) 0が完全に透明から、1が完全に不透明の間の、色の透明度。
+	 * @return {String} 指定されたHSLカラー数値に基づいた、"hsla(360,100,100,1.0)"形式、
+	 * または透明度がnullの場合は"hsl(360,100,100)"の形式で、CSSと互換性のある色の文字列。
 	 **/
 	Graphics.getHSL = function(hue, saturation, lightness, alpha) {
 		if (alpha == null) {
@@ -187,7 +185,7 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Map of Base64 characters to values. Used by {{#crossLink "Graphics/decodePath"}}{{/crossLink}}.
+	 * 値をBase64文字列に変換します。{{#crossLink "Graphics/decodePath"}}{{/crossLink}}で使用されます。
 	 * @property BASE_64
 	 * @static
 	 * @final
@@ -197,10 +195,10 @@ var p = Graphics.prototype;
 		
 	
 	/**
-	 * Maps numeric values for the caps parameter of {{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}} to
-	 * corresponding string values. This is primarily for use with the tiny API. The mappings are as follows: 0 to
-	 * "butt", 1 to "round", and 2 to "square".
-	 * For example, to set the line caps to "square":
+	 * {{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}}の線端パラメータを表す数値を、
+	 * 対応する文字列値に変換します。これは主に短縮版API用です。変換は以下のようになります:
+	 * 0 は "なし", 1 は "丸型", and 2 は "角型"。
+	 * 例は、線端を"角型"に設定する場合です：
 	 *
 	 *      myGraphics.ss(16, 2);
 	 *
@@ -212,10 +210,10 @@ var p = Graphics.prototype;
 	Graphics.STROKE_CAPS_MAP = ["butt", "round", "square"];
 	
 	/**
-	 * Maps numeric values for the joints parameter of {{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}} to
-	 * corresponding string values. This is primarily for use with the tiny API. The mappings are as follows: 0 to
-	 * "miter", 1 to "round", and 2 to "bevel".
-	 * For example, to set the line joints to "bevel":
+	 * {{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}}の結合スタイル値を表す数値を、
+	 * 対応する文字列値に変換します。これは主に短縮版API用です。変換は以下のようになります:
+	 * 0 は "マイター"、1 は "ラウンド"、2 は "ベベル"。
+	 * 例は、結合スタイルを"ベベル"に設定する場合です：
 	 *      myGraphics.ss(16, 0, 2);
 	 *
 	 * @property STROKE_JOINTS_MAP
@@ -257,9 +255,9 @@ var p = Graphics.prototype;
 	 **/
 	Graphics.strokeCmd = new Command(Graphics._ctx.stroke, [], false);
 	
-// public properties
+// パブリックプロパティ
 
-// private properties
+// プライベートプロパティ
 	/**
 	 * @property _strokeInstructions
 	 * @protected
@@ -326,7 +324,7 @@ var p = Graphics.prototype;
 	p._dirty = false;
 	
 	/** 
-	 * Initialization method.
+	 * 初期化メソッド
 	 * @method initialize
 	 * @protected
 	 **/
@@ -336,21 +334,21 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Returns true if this Graphics instance has no drawing commands.
+	 * Graphicsインスタンスが描画命令を持っていない場合、trueを返します。
 	 * @method isEmpty
-	 * @return {Boolean} Returns true if this Graphics instance has no drawing commands.
+	 * @return {Boolean} Graphicsインスタンスが描画命令を持っていない場合、trueを返します。
 	 **/
 	p.isEmpty = function() {
 		return !(this._instructions.length || this._oldInstructions.length || this._activeInstructions.length);
 	};
 	
 	/**
-	 * Draws the display object into the specified context ignoring it's visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * 指定されたコンテキストに、それ自身の表示・非表示、透明度、影、変形は無視して、表示オブジェクトを描画します。
+	 * 描画が処理された場合trueを返します (機能をオーバーライドするのに有用)。
 	 *
-	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * 注意：このメソッドは主に内部的な用途のためのものですが、高度な利用方法にも有用かもしれません。
 	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {CanvasRenderingContext2D} ctx 描画する対象の、canvas2Dコンテクストオブジェクト。
 	 **/
 	p.draw = function(ctx) {
 		if (this._dirty) { this._updateInstructions(); }
@@ -361,10 +359,10 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws only the path described for this Graphics instance, skipping any non-path instructions, including fill and
-	 * stroke descriptions. Used by DisplayObject.clippingPath to draw the clipping path, for example.
+	 * Graphicsインスタンスに対して線の描画のみを行い、塗りやストロークを含む線以外の命令をスキップします。
+	 * 例えば、DisplayObject.clippingPathにおいて、クリッピングパスを描画するために使用されます。
 	 * @method drawAsPath
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {CanvasRenderingContext2D} ctx 描画する対象の、canvas2Dコンテクストオブジェクト。
 	 **/
 	p.drawAsPath = function(ctx) {
 		if (this._dirty) { this._updateInstructions(); }
@@ -375,13 +373,13 @@ var p = Graphics.prototype;
 		}
 	};
 	
-// public methods that map directly to context 2D calls:
+// context2D命令に直接対応するパブリックメソッド:
 	/**
-	 * Moves the drawing point to the specified position.
+	 * 指定した座標に描画点を移動します。
 	 * @method moveTo
-	 * @param {Number} x The x coordinate the drawing point should move to.
-	 * @param {Number} y The y coordinate the drawing point should move to.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} x 描画点の移動先のx座標。
+	 * @param {Number} y 描画点の移動先のy座標。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.moveTo = function(x, y) {
 		this._activeInstructions.push(new Command(this._ctx.moveTo, [x, y]));
@@ -389,16 +387,16 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a line from the current drawing point to the specified position, which become the new current drawing
-	 * point.
+	 * 現在の描画位置から指定した座標に対して線を描画します。指定した座標は、新しい現在の描画位置になります。
 	 *
-	 * For detailed information, read the 
+	 * より詳しい情報は
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#complex-shapes-(paths)">
-	 * whatwg spec</a>.
+	 * whatwg spec</a>
+	 * を参照してください。
 	 * @method lineTo
-	 * @param {Number} x The x coordinate the drawing point should draw to.
-	 * @param {Number} y The y coordinate the drawing point should draw to.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} x 線を描画する先となる描画点のx座標。
+	 * @param {Number} y 線を描画する先となる描画点のy座標。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.lineTo = function(x, y) {
 		this._dirty = this._active = true;
@@ -407,8 +405,9 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws an arc with the specified control points and radius.  For detailed information, read the 
+	 * 指定した制御点と半径で円弧を描画します。詳細な情報は、
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-arcto">
+	 * を参照してください。
 	 * whatwg spec</a>.
 	 * @method arcTo
 	 * @param {Number} x1
@@ -416,7 +415,7 @@ var p = Graphics.prototype;
 	 * @param {Number} x2
 	 * @param {Number} y2
 	 * @param {Number} radius
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.arcTo = function(x1, y1, x2, y2, radius) {
 		this._dirty = this._active = true;
@@ -425,21 +424,22 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws an arc defined by the radius, startAngle and endAngle arguments, centered at the position (x, y). For
-	 * example, to draw a full circle with a radius of 20 centered at (100, 100):
+	 * 半径、始点の角度、終点の角度、中心店の座標(x, y)から定義される円弧を描画します。
+	 * 以下の例では、半径20で中心点が(100, 100)の完全な円を描画します:
 	 *
 	 *      arc(100, 100, 20, 0, Math.PI*2);
 	 *
-	 * For detailed information, read the
+	 * 詳細な情報は、
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-arc">whatwg spec</a>.
+	 * を参照してください。
 	 * @method arc
 	 * @param {Number} x
 	 * @param {Number} y
 	 * @param {Number} radius
-	 * @param {Number} startAngle Measured in radians.
-	 * @param {Number} endAngle Measured in radians.
+	 * @param {Number} ラジアン単位による始点の角度。
+	 * @param {Number} ラジアン単位による終点の角度。
 	 * @param {Boolean} anticlockwise
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
 		this._dirty = this._active = true;
@@ -449,15 +449,17 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a quadratic curve from the current drawing point to (x, y) using the control point (cpx, cpy). For detailed
-	 * information, read the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-quadraticcurveto">
-	 * whatwg spec</a>.
+	 * 制御点(cpx, cpy)を使用して、現在の描画位置から二次曲線(x, y)を描画します。
+	 * 詳細な情報は、
+	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-quadraticcurveto">
+	 * whatwg spec</a>
+	 * を参照してください。
 	 * @method quadraticCurveTo
 	 * @param {Number} cpx
 	 * @param {Number} cpy
 	 * @param {Number} x
 	 * @param {Number} y
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.quadraticCurveTo = function(cpx, cpy, x, y) {
 		this._dirty = this._active = true;
@@ -466,10 +468,11 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a bezier curve from the current drawing point to (x, y) using the control points (cp1x, cp1y) and (cp2x,
-	 * cp2y). For detailed information, read the
+	 * 制御点（cp1x、cp1y）と（cp2x、cp2y）を使用して、現在の描画位置から（x、y）にベジエ曲線を描画します。
+	 * 詳細な情報は、
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-beziercurveto">
-	 * whatwg spec</a>.
+	 * whatwg spec</a>
+	 * を参照してください。
 	 * @method bezierCurveTo
 	 * @param {Number} cp1x
 	 * @param {Number} cp1y
@@ -477,7 +480,7 @@ var p = Graphics.prototype;
 	 * @param {Number} cp2y
 	 * @param {Number} x
 	 * @param {Number} y
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
 		this._dirty = this._active = true;
@@ -486,16 +489,17 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a rectangle at (x, y) with the specified width and height using the current fill and/or stroke.
-	 * For detailed information, read the
+	 * 現在の塗りとストロークを使用して、指定された幅と高さで（x、y）の位置に四角形を描画します。
+	 * 詳細な情報は、
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-rect">
-	 * whatwg spec</a>.
+	 * whatwg spec</a>
+	 * を参照してください。
 	 * @method rect
 	 * @param {Number} x
 	 * @param {Number} y
-	 * @param {Number} w Width of the rectangle
-	 * @param {Number} h Height of the rectangle
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} w 四角形の幅
+	 * @param {Number} h 四角形の高さ
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.rect = function(x, y, w, h) {
 		this._dirty = this._active = true;
@@ -504,10 +508,10 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Closes the current path, effectively drawing a line from the current drawing point to the first drawing point specified
-	 * since the fill or stroke was last set.
+	 * 最後に設定された塗りまたはストロークを使用して、
+	 * 現在の描画ポイントから最初の描画ポイントに有効な線を引き、現在のパスを閉じます。
 	 * @method closePath
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.closePath = function() {
 		if (this._active) {
@@ -518,11 +522,11 @@ var p = Graphics.prototype;
 	};
 	
 	
-// public methods that roughly map to Flash graphics APIs:
+//  Flash graphics APIに大まかに対応するパブリックメソッド:
 	/**
-	 * Clears all drawing instructions, effectively resetting this Graphics instance.
+	 * すべての描画命令を消去して、Graphicsインスタンスを効果的にリセットします。
 	 * @method clear
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.clear = function() {
 		this._instructions = [];
@@ -534,11 +538,11 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a fill with the specified color. This ends the current sub-path.
+	 * 指定した色で塗りつぶしを開始します。このメソッドは現在のサブパスを終了します。
 	 * @method beginFill
-	 * @param {String} color A CSS compatible color value (ex. "red", "#FF0000", or "rgba(255,0,0,0.5)"). Setting to
-	 * null will result in no fill.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {String} color CSS互換性のある色の値（例："red"、 "＃FF0000"、または "RGBA(255,0,0,0.5)"）。
+	 * nullに設定すると、塗りなしになります。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginFill = function(color) {
 		if (this._active) { this._newPath(); }
@@ -547,21 +551,19 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a linear gradient fill defined by the line (x0, y0) to (x1, y1). This ends the current sub-path. For
-	 * example, the following code defines a black to white vertical gradient ranging from 20px to 120px, and draws a square to display it:
+	 * (x0, y0)から(x1, y1)の線で定義された、線形グラデーションの塗りを開始します。このメソッドは現在のサブパスを終了します。
+	 * 例えば次のコードでは、20pxから120ピクセルまでの範囲で黒から白へ、垂直方向のグラデーションを定義して、それを適用した四角形を描画します:
 	 *
 	 *      myGraphics.beginLinearGradientFill(["#000","#FFF"], [0, 1], 0, 20, 0, 120).drawRect(20, 20, 120, 120);
 	 *
 	 * @method beginLinearGradientFill
-	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define a gradient
-	 * drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would draw
-	 * the first color to 10% then interpolating to the second color at 90%.
-	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
-	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
-	 * @param {Number} x1 The position of the second point defining the line that defines the gradient direction and size.
-	 * @param {Number} y1 The position of the second point defining the line that defines the gradient direction and size.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Array} colors CSS互換性のあるカラー値の配列。例えば["#F00", "#00F"]は、赤から青へのグラデーション描画を定義します。
+	 * @param {Array} ratios 色に対応するグラデーションポイントの配列。例えば、[0.1, 0.9]は最初の色が10%、2番目の色が90%になるよう補完します。
+	 * @param {Number} x0 グラデーション方向と大きさを定義する線の、最初の点の位置。
+	 * @param {Number} y0 グラデーション方向と大きさを定義する線の、最初の点の位置。
+	 * @param {Number} x1 グラデーション方向と大きさを定義する線の、二番目の点の位置。
+	 * @param {Number} y1 グラデーション方向と大きさを定義する線の、二番目の点の位置。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
 		if (this._active) { this._newPath(); }
@@ -574,23 +576,21 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a radial gradient fill. This ends the current sub-path. For example, the following code defines a red to
-	 * blue radial gradient centered at (100, 100), with a radius of 50, and draws a circle to display it:
+	 * 放射状グラデーションの塗りを開始します。このメソッドは、現在のサブパスを終了します。
+	 * 例えば次のコードは、50の半径と、中心点が(100, 100)で赤から青への放射状グラデーションを定義し、それを適用した円を描画します:
 	 *
 	 *      myGraphics.beginRadialGradientFill(["#F00","#00F"], [0, 1], 100, 100, 0, 100, 100, 50).drawCircle(100, 100, 50);
 	 *
 	 * @method beginRadialGradientFill
-	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
-	 * a gradient drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
-	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
-	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
-	 * @param {Number} r0 Radius of the inner circle that defines the gradient.
-	 * @param {Number} x1 Center position of the outer circle that defines the gradient.
-	 * @param {Number} y1 Center position of the outer circle that defines the gradient.
-	 * @param {Number} r1 Radius of the outer circle that defines the gradient.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Array} colors CSS互換性のあるカラー値の配列。例えば["#F00", "#00F"]は、赤から青へのグラデーション描画を定義します。
+	 * @param {Array} ratios 色に対応するグラデーションポイントの配列。例えば、[0.1, 0.9]は最初の色が10%、2番目の色が90%になるよう補完します。
+	 * @param {Number} x0 グラデーションを定義する内側の円の中心点。
+	 * @param {Number} y0 グラデーションを定義する内側の円の中心点。
+	 * @param {Number} r0 グラデーションを定義する内側の円の半径。
+	 * @param {Number} x1 グラデーションを定義する外側の円の中心点。
+	 * @param {Number} y1 グラデーションを定義する外側の円の中心点。
+	 * @param {Number} r1 グラデーションを定義する外側の円の半径。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
 		if (this._active) { this._newPath(); }
@@ -603,13 +603,13 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a pattern fill using the specified image. This ends the current sub-path.
+　	 * 指定された画像を使用した、パターンの塗りつぶしを開始します。このメソッドは、現在のサブパスを終了します。
 	 * @method beginBitmapFill
-	 * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement} image The Image, Canvas, or Video object to use as the pattern.
-	 * @param {String} repetition Optional. Indicates whether to repeat the image in the fill area. One of "repeat", "repeat-x",
-	 * "repeat-y", or "no-repeat". Defaults to "repeat".
-	 * @param {Matrix2D} matrix Optional. Specifies a transformation matrix for the bitmap fill. This transformation will be applied relative to the parent transform.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement} image パターンに使用する、Image、Canvas、またはVideoオブジェクト。
+	 * @param {String} repetition (オプション) 塗りつぶし領域内で、画像を繰り返すかどうかを示します。"repeat"、"repeat-x"、"repeat-y"、
+	 * または"no-repeat"のうち一つです。デフォルト値は"repeat"です。
+	 * @param {Matrix2D} matrix (オプション) ビットマップの塗りのための変換行列を指定します。この変換は、親の変換に対して相対的に適用されます。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginBitmapFill = function(image, repetition, matrix) {
 		if (this._active) { this._newPath(); }
@@ -633,33 +633,31 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Ends the current sub-path, and begins a new one with no fill. Functionally identical to <code>beginFill(null)</code>.
+	 * 現在のサブパスを終了し、塗りなしで新規に開始します。機能的に<code>beginFill(null)</code>と同じです。
 	 * @method endFill
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.endFill = function() {
 		return this.beginFill();
 	};
 	
 	/**
-	 * Sets the stroke style for the current sub-path. Like all drawing methods, this can be chained, so you can define
-	 * the stroke style and color in a single line of code like so:
+	 * 現在のサブパスのストロークスタイルを設定します。すべての描画メソッドと同様に、このメソッドは連鎖することができるので、
+	 * 以下のように一行のコードでストロークスタイルと色を定義することができます。
 	 *
 	 *      myGraphics.setStrokeStyle(8,"round").beginStroke("#F00");
 	 *
 	 * @method setStrokeStyle
-	 * @param {Number} thickness The width of the stroke.
-	 * @param {String | Number} [caps=0] Indicates the type of caps to use at the end of lines. One of butt,
-	 * round, or square. Defaults to "butt". Also accepts the values 0 (butt), 1 (round), and 2 (square) for use with
-	 * the tiny API.
-	 * @param {String | Number} [joints=0] Specifies the type of joints that should be used where two lines meet.
-	 * One of bevel, round, or miter. Defaults to "miter". Also accepts the values 0 (miter), 1 (round), and 2 (bevel)
-	 * for use with the tiny API.
-	 * @param {Number} [miterLimit=10] If joints is set to "miter", then you can specify a miter limit ratio which
-	 * controls at what point a mitered joint will be clipped.
-	 * @param {Boolean} [ignoreScale=false] If true, the stroke will be drawn at the specified thickness regardless
-	 * of active transformations.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} thickness ストロークの幅
+	 * @param {String | Number} [caps=0] 線端の種類を示します。"butt"(なし)、"round"(丸型)、"square"(角型)のうち一つです。デフォルト値は"butt"です。
+	 * 短縮版APIでは0(なし)、1(丸型)、2(角型)の数値でも指定できます。
+	 * @param {String | Number} [joints=0] 2本の線が交差した場合に使用される、結合タイプを指定します。
+	 * "bevel"(ベベル)、"round"(ラウンド)、"miter"(マイター)のうち一つです。デフォルト値は"マイター"です。
+	 * 短縮版APIでは0(マイター)、1(ラウンド)、2(ベベル)の数値でも指定できます。
+	 * @param {Number} [miterLimit=10] 結合タイプが"miter"に設定されている場合、マイターのしきい値を指定して、
+	 * どの位置でマイターの結合部分がクリップされるかを制御することができます。
+	 * @param {Boolean} [ignoreScale=false] trueの場合、現在有効な変換に関係なく、指定した太さでストロークが描画されます。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.setStrokeStyle = function(thickness, caps, joints, miterLimit, ignoreScale) {
 		if (this._active) { this._newPath(); }
@@ -674,11 +672,11 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a stroke with the specified color. This ends the current sub-path.
+	 * 指定した色でストロークを開始します。このメソッドは、現在のサブパスを終了します。
 	 * @method beginStroke
-	 * @param {String} color A CSS compatible color value (ex. "#FF0000", "red", or "rgba(255,0,0,0.5)"). Setting to
-	 * null will result in no stroke.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {String} color CSS互換性のある色の値（例："＃FF0000"、"red"、 または "RGBA(255,0,0,0.5)"）。
+	 * nullに設定すると、ストロークなしになります。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginStroke = function(color) {
 		if (this._active) { this._newPath(); }
@@ -687,22 +685,19 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a linear gradient stroke defined by the line (x0, y0) to (x1, y1). This ends the current sub-path. For
-	 * example, the following code defines a black to white vertical gradient ranging from 20px to 120px, and draws a
-	 * square to display it:
+	 * (x0, y0)から(x1, y1)の線で定義された、線形グラデーションのストロークを開始します。このメソッドは現在のサブパスを終了します。
+	 * 例えば次のコードでは、20pxから120ピクセルまでの範囲で黒から白へ、垂直方向のグラデーションを定義して、それを適用した四角形を描画します:
 	 *
 	 *      myGraphics.setStrokeStyle(10).beginLinearGradientStroke(["#000","#FFF"], [0, 1], 0, 20, 0, 120).drawRect(20, 20, 120, 120);
 	 *
 	 * @method beginLinearGradientStroke
-	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
-	 * a gradient drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
-	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
-	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
-	 * @param {Number} x1 The position of the second point defining the line that defines the gradient direction and size.
-	 * @param {Number} y1 The position of the second point defining the line that defines the gradient direction and size.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Array} colors CSS互換性のあるカラー値の配列。例えば["#F00", "#00F"]は、赤から青へのグラデーション描画を定義します。
+	 * @param {Array} ratios 色に対応するグラデーションポイントの配列。例えば、[0.1, 0.9]は最初の色が10%、2番目の色が90%になるよう補完します。
+	 * @param {Number} x0 グラデーション方向と大きさを定義する線の、最初の点の位置。
+	 * @param {Number} y0 グラデーション方向と大きさを定義する線の、最初の点の位置。
+	 * @param {Number} x1 グラデーション方向と大きさを定義する線の、二番目の点の位置。
+	 * @param {Number} y1 グラデーション方向と大きさを定義する線の、二番目の点の位置。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
 		if (this._active) { this._newPath(); }
@@ -716,26 +711,23 @@ var p = Graphics.prototype;
 
 	
 	/**
-	 * Begins a radial gradient stroke. This ends the current sub-path. For example, the following code defines a red to
-	 * blue radial gradient centered at (100, 100), with a radius of 50, and draws a rectangle to display it:
+	 * 放射状グラデーションのストロークを開始します。このメソッドは、現在のサブパスを終了します。
+	 * 例えば次のコードは、50の半径と、中心点が(100, 100)で赤から青への放射状グラデーションを定義し、それを適用した円を描画します:
 	 *
 	 *      myGraphics.setStrokeStyle(10)
 	 *          .beginRadialGradientStroke(["#F00","#00F"], [0, 1], 100, 100, 0, 100, 100, 50)
 	 *          .drawRect(50, 90, 150, 110);
 	 *
 	 * @method beginRadialGradientStroke
-	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
-	 * a gradient drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%, then draw the second color
-	 * to 100%.
-	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
-	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
-	 * @param {Number} r0 Radius of the inner circle that defines the gradient.
-	 * @param {Number} x1 Center position of the outer circle that defines the gradient.
-	 * @param {Number} y1 Center position of the outer circle that defines the gradient.
-	 * @param {Number} r1 Radius of the outer circle that defines the gradient.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
+	 * @param {Array} colors CSS互換性のあるカラー値の配列。例えば["#F00", "#00F"]は、赤から青へのグラデーション描画を定義します。
+	 * @param {Array} ratios 色に対応するグラデーションポイントの配列。例えば、[0.1, 0.9]は最初の色が10%、2番目の色が90%になるよう補完します。
+	 * @param {Number} x0 グラデーションを定義する内側の円の中心点。
+	 * @param {Number} y0 グラデーションを定義する内側の円の中心点。
+	 * @param {Number} r0 グラデーションを定義する内側の円の半径。
+	 * @param {Number} x1 グラデーションを定義する外側の円の中心点。
+	 * @param {Number} y1 グラデーションを定義する外側の円の中心点。
+	 * @param {Number} r1 グラデーションを定義する外側の円の半径。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
 		if (this._active) { this._newPath(); }
@@ -748,14 +740,13 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Begins a pattern fill using the specified image. This ends the current sub-path. Note that unlike bitmap fills, strokes
-	 * do not currently support a matrix parameter due to limitations in the canvas API.
+	 * 指定した画像を使用した、パターンのストロークを開始します。このメソッドは現在のサブパスを終了します。ビットマップの塗りと違い、現在のキャンバスAPIの制限のため、
+	 * ストロークはmatrixパラメータをサポートしていないことに注意してください。
 	 * @method beginBitmapStroke
-	 * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement} image The Image, Canvas, or Video object to use
-	 * as the pattern.
-	 * @param {String} [repetition=repeat] Optional. Indicates whether to repeat the image in the fill area. One of "repeat",
-	 * "repeat-x", "repeat-y", or "no-repeat". Defaults to "repeat".
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)	
+	 * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement} image パターンに使用する、Image、Canvas、またはVideoオブジェクト。
+	 * @param {String} [repetition=repeat] (オプション) 塗りつぶし領域内で、画像を繰り返すかどうかを示します。"repeat"、"repeat-x"、"repeat-y"、
+	 * または"no-repeat"のうち一つです。デフォルト値は"repeat"です。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.beginBitmapStroke = function(image, repetition) {
 		if (this._active) { this._newPath(); }
@@ -766,9 +757,9 @@ var p = Graphics.prototype;
 	};
 
 	/**
-	 * Ends the current sub-path, and begins a new one with no stroke. Functionally identical to <code>beginStroke(null)</code>.
+	 * 現在のサブパスを終了し、ストロークなしで新規に開始します。機能的に<code>beginStroke(null)</code>と同じです。
 	 * @method endStroke
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.endStroke = function() {
 		this.beginStroke();
@@ -776,7 +767,7 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Maps the familiar ActionScript <code>curveTo()</code> method to the functionally similar {{#crossLink "Graphics/quadraticCurveTo"}}{{/crossLink}}
+	 * 慣れ親しんだActionScriptの<code>curveTo()</code>メソッドに対応します。機能的には{{#crossLink "Graphics/quadraticCurveTo"}}{{/crossLink}}と同じです。
 	 * method.
 	 * @method curveTo
 	 * @type {Function}
@@ -784,7 +775,7 @@ var p = Graphics.prototype;
 	p.curveTo = p.quadraticCurveTo;
 	
 	/**
-	 * Maps the familiar ActionScript <code>drawRect()</code> method to the functionally similar {{#crossLink "Graphics/rect"}}{{/crossLink}}
+	 * 慣れ親しんだActionScriptの<code>drawRect()</code>メソッドに対応します。機能的には{{#crossLink "Graphics/rect"}}{{/crossLink}}と同じです。
 	 * method.
 	 * @method drawRect
 	 * @type {Function}
@@ -792,14 +783,14 @@ var p = Graphics.prototype;
 	p.drawRect = p.rect;
 	
 	/**
-	 * Draws a rounded rectangle with all corners with the specified radius.
+	 * 全ての角を指定された半径で丸めた、角丸の四角形を描画します。
 	 * @method drawRoundRect
 	 * @param {Number} x
 	 * @param {Number} y
 	 * @param {Number} w
 	 * @param {Number} h
-	 * @param {Number} radius Corner radius.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} radius 角丸の半径。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.drawRoundRect = function(x, y, w, h, radius) {
 		this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
@@ -807,17 +798,17 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a rounded rectangle with different corner radii. Supports positive and negative corner radii.
+	 * それぞれの角を個別の半径で丸めた、角丸の四角形を描画します。角丸の半径は正負の値に対応します。
 	 * @method drawRoundRectComplex
 	 * @param {Number} x
 	 * @param {Number} y
 	 * @param {Number} w
 	 * @param {Number} h
-	 * @param {Number} radiusTL Top left corner radius.
-	 * @param {Number} radiusTR Top right corner radius.
-	 * @param {Number} radiusBR Bottom right corner radius.
-	 * @param {Number} radiusBL Bottom left corner radius.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} radiusTL 左上の角丸の半径。
+	 * @param {Number} radiusTR 右上の角丸の半径。
+	 * @param {Number} radiusBR 右下の角丸の半径。
+	 * @param {Number} radiusBL 左下の角丸の半径。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.drawRoundRectComplex = function(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
 		var max = (w<h?w:h)/2;
@@ -848,7 +839,7 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a circle with the specified radius at (x, y).
+	 * 指定された半径と（x、y）により円を描画します。
 	 *
 	 *      var g = new Graphics();
 	 *	    g.setStrokeStyle(1);
@@ -864,10 +855,10 @@ var p = Graphics.prototype;
 	 *	    stage.update();
 	 *
 	 * @method drawCircle
-	 * @param {Number} x x coordinate center point of circle.
-	 * @param {Number} y y coordinate center point of circle.
-	 * @param {Number} radius Radius of circle.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} x 円の中心点のx座標
+	 * @param {Number} y 円の中心点のy座標
+	 * @param {Number} 円の半径
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.drawCircle = function(x, y, radius) {
 		this.arc(x, y, radius, 0, Math.PI*2);
@@ -875,14 +866,14 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws an ellipse (oval) with a specified width (w) and height (h). Similar to {{#crossLink "Graphics/drawCircle"}}{{/crossLink}},
-	 * except the width and height can be different.
+	 * 指定された幅(w)と高さ(h)で楕円（オーバル）を描画します。
+	 * 幅と高さが異なる値にできることを除き、{{#crossLink "Graphics/drawCircle"}}{{/crossLink}}と同じです。
 	 * @method drawEllipse
-	 * @param {Number} x x coordinate center point of ellipse.
-	 * @param {Number} y y coordinate center point of ellipse.
-	 * @param {Number} w height (horizontal diameter) of ellipse. The horizontal radius will be half of this number.
-	 * @param {Number} h width (vertical diameter) of ellipse. The vertical radius will be half of this number.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} x 楕円の中心点のx座標
+	 * @param {Number} y 楕円の中心点のy座標
+	 * @param {Number} w 楕円の幅（水平方向の直径）。水平方向の半径は、この数値の半分になります。
+	 * @param {Number} h 楕円の高さ（垂直方向の直径）。垂直方向の半径は、この数値の半分になります。
+	 * @return {Graphics} メソッドが呼び出されたGraphicsインスタンス（連鎖した呼び出しに有用）。
 	 **/
 	p.drawEllipse = function(x, y, w, h) {
 		this._dirty = this._active = true;
@@ -905,22 +896,19 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Draws a star if pointSize is greater than 0, or a regular polygon if pointSize is 0 with the specified number of
-	 * points. For example, the following code will draw a familiar 5 pointed star shape centered at 100, 100 and with a
-	 * radius of 50:
+	 * ポイントサイズが0より大きい場合は星型、またはポイントサイズが0である場合は指定した頂点数の正多角形を描画します。
+	 * 例えば、次のコードでは中心が100、100、半径が50の、慣れ親しんだ五芒星のシェイプを描画します：
 	 *      myGraphics.beginFill("#FF0").drawPolyStar(100, 100, 50, 5, 0.6, -90);
-	 *      // Note: -90 makes the first point vertical
+	 *      // 注意: -90では最初の点が垂直になります
 	 *
 	 * @method drawPolyStar
-	 * @param {Number} x Position of the center of the shape.
-	 * @param {Number} y Position of the center of the shape.
-	 * @param {Number} radius The outer radius of the shape.
-	 * @param {Number} sides The number of points on the star or sides on the polygon.
-	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will draw a regular
-	 * polygon (no points), a pointSize of 1 will draw nothing because the points are infinitely pointy.
-	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will draw the first point
-	 * directly to the right of the center.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {Number} シェイプの中心のx座標。
+	 * @param {Number} シェイプの中心のy座標。
+	 * @param {Number} radius シェイプの外半径。
+	 * @param {Number} sides 星、または多角形の側面にある点の数。
+	 * @param {Number} pointSize 星の各点の尖り具合（谷）の深さ。pointSizeが0の場合、正多角形が描画されます(谷がない), pointSizeが1の場合、無限に尖っていることになるため、なにも描画されません。
+	 * @param {Number} angle 最初の点/コーナーの角度。 例えば0の場合は、中央の右側にある最初の点が直接描画されます。
+	 * @return {Graphics} メソッドが呼び出されたGraphicインスタンス (連鎖した呼び出しに有用)。
 	 **/
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
 		this._dirty = this._active = true;
@@ -943,32 +931,32 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Decodes a compact encoded path string into a series of draw instructions.
-	 * This format is not intended to be human readable, and is meant for use by authoring tools.
-	 * The format uses a base64 character set, with each character representing 6 bits, to define a series of draw commands.
+	 * 圧縮されたエンコードパスの文字列を、連続した描画命令にデコードします。
+	 * このフォーマットは人間が読み取ることを意図しておらず、オーサリングツールで使用されます。
+	 * このフォーマットではbase64文字セットを使用しています。各文字は連続する描画命令を定義するための6ビット文字に変換されます。
 	 *
-	 * Each command is comprised of a single "header" character followed by a variable number of alternating x and y position values.
-	 * Reading the header bits from left to right (most to least significant): bits 1 to 3 specify the type of operation
-	 * (0-moveTo, 1-lineTo, 2-quadraticCurveTo, 3-bezierCurveTo, 4-closePath, 5-7 unused). Bit 4 indicates whether position values use 12 bits (2 characters) 
-	 * or 18 bits (3 characters), with a one indicating the latter. Bits 5 and 6 are currently unused.
+	 * 各コマンドは、単一の"ヘッダー"文字と、それに続くxおよびy座標の値を交互に繋げた変数から構成された文字列に圧縮されます。
+	 * ヘッダービットは左から右へ読みます(ほとんどの場合は右端ビットまで):1～3ビットは、操作の種類を指定します。
+	 * (0-moveTo, 1-lineTo, 2-quadraticCurveTo, 3-bezierCurveTo, 4-closePath, 5-7 未使用)
+	 * ビット4は座標の値に12ビット（2文字）または18ビット(3文字)のどちらを使用するかを示します。5と6のビットは現在未使用です。
 	 *
-	 * Following the header is a series of 0 (closePath), 2 (moveTo, lineTo), 4 (quadraticCurveTo), or 6 (bezierCurveTo) parameters.
-	 * These parameters are alternating x/y positions represented by 2 or 3 characters (as indicated by the 4th bit in the command char).
-	 * These characters consist of a 1 bit sign (1 is negative, 0 is positive), followed by an 11 (2 char) or 17 (3 char) bit integer value.
-	 * All position values are in tenths of a pixel.
-	 * Except in the case of move operations which are absolute, this value is a delta from the previous x or y position (as appropriate).
+	 * ヘッダに続くのは、0（closePath）、2（moveTo, LINETO）、4（quadraticCurveTo）、または6（bezierCurveTo）のパラメータです。
+	 * これらのパラメータは、2または3文字によって表される（コマンド文字のビット4で示されます）、x/y座標を交互に並べたものです。
+	 * これらの文字は、1ビットの符号（1は負、0が正）と、それに続く11（2文字）または17（3文字）ビットの整数値から構成されています。
+	 * 全ての座標値は、1ピクセルの1/10の単位です。
+	 * 絶対値による移動操作の場合を除き、この値は、以前のxまたはy位置からの相対値です（適切なものが選択されます）。
 	 *
-	 * For example, the string "A3cAAMAu4AAA" represents a line starting at -150,0 and ending at 150,0.
-	 * <br />A - bits 000000. First 3 bits (000) indicate a moveTo operation. 4th bit (0) indicates 2 chars per parameter.
-	 * <br />n0 - 110111011100. Absolute x position of -150.0px. First bit indicates a negative value, remaining bits indicate 1500 tenths of a pixel.
-	 * <br />AA - 000000000000. Absolute y position of 0.
-	 * <br />I - 001100. First 3 bits (001) indicate a lineTo operation. 4th bit (1) indicates 3 chars per parameter.
-	 * <br />Au4 - 000000101110111000. An x delta of 300.0px, which is added to the previous x value of -150.0px to provide an absolute position of +150.0px.
-	 * <br />AAA - 000000000000000000. A y delta value of 0.
+	 * 例えば、"A3cAAMAu4AAA"の文字列は、-150,0から始まり150,0で終わる直線を表します。
+	 * <br />A - bits 000000. 最初の3ビット(000)はmoveTo命令を示します。ビット4(0)はパラメータごとに2文字であることを示します。
+	 * <br />3c - 110111011100. xの絶対値は-150.0pxです。最初のビットは負の値であることを示し、残りのビット列は1ピクセルの1/10の単位で1500であることを示します。
+	 * <br />AA - 000000000000. yの絶対座標は0です。
+	 * <br />I - 001100. 最初の3ビット(001)はlineTo命令を示します。ビット4(1)はパラメータごとに3文字であることを示します。
+	 * <br />Au4 - 000000101110111000. xの相対値は300.0pxです。これは前のx座標である-150.0pxに加算され、絶対座標では+150.0pxになります。
+	 * <br />AAA - 000000000000000000. yの相対値は0です。
 	 * 
 	 * @method decodePath
-	 * @param {String} str The path string to decode.
-	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
+	 * @param {String} str デコードするパス文字列。
+	 * @return {Graphics} メソッドが呼び出されたGraphicインスタンス (連鎖した呼び出しに有用)。
 	 **/
 	p.decodePath = function(str) {
 		var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo, this.closePath];
@@ -981,15 +969,15 @@ var p = Graphics.prototype;
 		while (i<l) {
 			var c = str.charAt(i);
 			var n = base64[c];
-			var fi = n>>3; // highest order bits 1-3 code for operation.
+			var fi = n>>3; // 最上位ビット操作のため1-3コード
 			var f = instructions[fi];
-			// check that we have a valid instruction & that the unused bits are empty:
+			// 有効な命令であること＆未使用ビットが空であることをチェックします:
 			if (!f || (n&3)) { throw("bad path data (@"+i+"): "+c); }
 			var pl = paramCount[fi];
-			if (!fi) { x=y=0; } // move operations reset the position.
+			if (!fi) { x=y=0; } // 位置をリセットする移動命令
 			params.length = 0;
 			i++;
-			var charCount = (n>>2&1)+2;  // 4th header bit indicates number size for this operation.
+			var charCount = (n>>2&1)+2;  // 4番目のヘッダービットは、この命令のサイズを示す数値
 			for (var p=0; p<pl; p++) {
 				var num = base64[str.charAt(i)];
 				var sign = (num>>5) ? -1 : 1;
@@ -1007,9 +995,9 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * Returns a clone of this Graphics instance.
+	 * Graphicsインスタンスの複製を返します。
 	 * @method clone
-	 * @return {Graphics} A clone of the current Graphics instance.
+	 * @return {Graphics} 現在のGraphicsインスタンスの複製。
 	 **/
 	p.clone = function() {
 		var o = new Graphics();
@@ -1025,199 +1013,199 @@ var p = Graphics.prototype;
 	};
 		
 	/**
-	 * Returns a string representation of this object.
+	 * このオブジェクトの文字列表現を返します。
 	 * @method toString
-	 * @return {String} a string representation of the instance.
+	 * @return {String} このインスタンスの文字列表現。
 	 **/
 	p.toString = function() {
 		return "[Graphics]";
 	};
 	
 	
-// tiny API:
-	/** Shortcut to moveTo.
+// 短縮版API:
+	/** moveToへのショートカット。
 	 * @method mt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.mt = p.moveTo;
 	
-	/** Shortcut to lineTo.
+	/** lineToへのショートカット。
 	 * @method lt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.lt = p.lineTo;
 	
-	/** Shortcut to arcTo.
+	/** arcToへのショートカット。
 	 * @method at
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.at = p.arcTo;
 	
-	/** Shortcut to bezierCurveTo.
+	/** bezierCurveToへのショートカット。
 	 * @method bt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bt = p.bezierCurveTo;
 	
-	/** Shortcut to quadraticCurveTo / curveTo.
+	/** quadraticCurveTo / curveToへのショートカット。
 	 * @method qt
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.qt = p.quadraticCurveTo;
 	
-	/** Shortcut to arc.
+	/** arcへのショートカット。
 	 * @method a
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.a = p.arc;
 	
-	/** Shortcut to rect.
+	/** rectへのショートカット。
 	 * @method r
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.r = p.rect;
 	
-	/** Shortcut to closePath.
+	/** closePathへのショートカット。
 	 * @method cp
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.cp = p.closePath;
 	
-	/** Shortcut to clear.
+	/** clearへのショートカット。
 	 * @method c
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.c = p.clear;
 	
-	/** Shortcut to beginFill.
+	/** beginFillへのショートカット。
 	 * @method f
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.f = p.beginFill;
 	
-	/** Shortcut to beginLinearGradientFill.
+	/** beginLinearGradientFillへのショートカット。
 	 * @method lf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.lf = p.beginLinearGradientFill;
 	
-	/** Shortcut to beginRadialGradientFill.
+	/** beginRadialGradientFillへのショートカット。
 	 * @method rf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rf = p.beginRadialGradientFill;
 	
-	/** Shortcut to beginBitmapFill.
+	/** beginBitmapFillへのショートカット。
 	 * @method bf
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bf = p.beginBitmapFill;
 	
-	/** Shortcut to endFill.
+	/** endFillへのショートカット。
 	 * @method ef
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ef = p.endFill;
 	
-	/** Shortcut to setStrokeStyle.
+	/** setStrokeStyleへのショートカット。
 	 * @method ss
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ss = p.setStrokeStyle;
 	
-	/** Shortcut to beginStroke.
+	/** beginStrokeへのショートカット。
 	 * @method s
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.s = p.beginStroke;
 	
-	/** Shortcut to beginLinearGradientStroke.
+	/** beginLinearGradientStrokeへのショートカット。
 	 * @method ls
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.ls = p.beginLinearGradientStroke;
 	
-	/** Shortcut to beginRadialGradientStroke.
+	/** beginRadialGradientStrokeへのショートカット。
 	 * @method rs
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rs = p.beginRadialGradientStroke;
 	
-	/** Shortcut to beginBitmapStroke.
+	/** beginBitmapStrokeへのショートカット。
 	 * @method bs
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.bs = p.beginBitmapStroke;
 	
-	/** Shortcut to endStroke.
+	/** endStrokeへのショートカット。
 	 * @method es
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.es = p.endStroke;
 	
-	/** Shortcut to drawRect.
+	/** drawRectへのショートカット。
 	 * @method dr
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dr = p.drawRect;
 	
-	/** Shortcut to drawRoundRect.
+	/** drawRoundRectへのショートカット。
 	 * @method rr
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rr = p.drawRoundRect;
 	
-	/** Shortcut to drawRoundRectComplex.
+	/** drawRoundRectComplexへのショートカット。
 	 * @method rc
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.rc = p.drawRoundRectComplex;
 	
-	/** Shortcut to drawCircle.
+	/** drawCircleへのショートカット。
 	 * @method dc
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dc = p.drawCircle;
 	
-	/** Shortcut to drawEllipse.
+	/** drawEllipseへのショートカット。
 	 * @method de
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.de = p.drawEllipse;
 	
-	/** Shortcut to drawPolyStar.
+	/** drawPolyStarへのショートカット。
 	 * @method dp
 	 * @protected
 	 * @type {Function}
 	 **/
 	p.dp = p.drawPolyStar;
 	
-	/** Shortcut to decodePath.
+	/** decodePathへのショートカット。
 	 * @method p
 	 * @protected
 	 * t@ype Function
@@ -1225,7 +1213,7 @@ var p = Graphics.prototype;
 	p.p = p.decodePath;
 	
 	
-// private methods:
+// プライベートメソッド:
 	/**
 	 * @method _updateInstructions
 	 * @protected
@@ -1266,9 +1254,9 @@ var p = Graphics.prototype;
 		this._active = this._dirty = false;
 	};
 	
-	// used to create Commands that set properties:
+	// プロパティを設定するコマンドの作成に使用します:
 	/**
-	 * Used to create Commands that set properties
+	 * プロパティを設定するコマンドの作成に使用します
 	 * @method _setProp
 	 * @param {String} name
 	 * @param {String} value
