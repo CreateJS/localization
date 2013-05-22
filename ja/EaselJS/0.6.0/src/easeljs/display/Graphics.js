@@ -866,7 +866,7 @@ var p = Graphics.prototype;
 	};
 	
 	/**
-	 * 指定された幅(w)と高さ(h)で楕円（オーバル）描画します。
+	 * 指定された幅(w)と高さ(h)で楕円（オーバル）を描画します。
 	 * 幅と高さが異なる値にできることを除き、{{#crossLink "Graphics/drawCircle"}}{{/crossLink}}と同じです。
 	 * @method drawEllipse
 	 * @param {Number} x 楕円の中心点のx座標
@@ -1022,7 +1022,7 @@ var p = Graphics.prototype;
 	};
 	
 	
-// 小さいAPI:
+// 短縮版API:
 	/** moveToへのショートカット。
 	 * @method mt
 	 * @protected
