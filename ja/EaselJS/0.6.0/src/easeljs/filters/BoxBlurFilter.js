@@ -88,7 +88,7 @@ var p = BoxBlurFilter.prototype = new createjs.Filter();
 	 * 例えば、描画領域を左に 4 ピクセル、右に 7 ピクセル広げるフィルターの場合
 	 * （ただし上下方向には広がらない）返される rectangle の値は (x=-4, y=0, width=11, height=0) になります。
 	 * @method getBounds
-	 * @return {Rectangle} です。
+	 * @return {Rectangle} フィルターの描画に必要なマージンを示す rectangle オブジェクトです。
 	 **/
 	p.getBounds = function() {
 		// TODO: this doesn't properly account for blur quality.

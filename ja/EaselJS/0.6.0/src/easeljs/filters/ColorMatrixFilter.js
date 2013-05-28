@@ -1,5 +1,5 @@
 /*
-* ColorFilter
+* ColorMatrixFilter
 * Visit http://createjs.com/ for documentation, updates and examples.
 *
 * Copyright (c) 2010 gskinner.com, inc.
@@ -32,98 +32,32 @@ this.createjs = this.createjs||{};
 (function() {
 
 /**
- * 色の変換を適用します。
+ * 彩度や明度の変更、反転といった複雑な色の操作を可能にします。
+ * 色の変更に関するより詳細な情報は {{#crossLink "ColorMatrix"}}{{/crossLink}} を参照して下さい。
  *
  * フィルターの使い方の例は {{#crossLink "Filter"}}{{/crossLink}} を参照して下さい。
- * @class ColorFilter
+ * @class ColorMatrixFilter
  * @constructor
  * @extends Filter
- * @param {Number} redMultiplier
- * @param {Number} greenMultiplier
- * @param {Number} blueMultiplier
- * @param {Number} alphaMultiplier
- * @param {Number} redOffset
- * @param {Number} greenOffset
- * @param {Number} blueOffset
- * @param {Number} alphaOffset
+ * @param {Array} matrix 実行される色への操作が記述された 4x5 行列。ColorMatrix クラスも参照して下さい。
  **/
-var ColorFilter = function(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
-  this.initialize(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset);
+var ColorMatrixFilter = function(matrix) {
+  this.initialize(matrix);
 }
-var p = ColorFilter.prototype = new createjs.Filter();
+var p = ColorMatrixFilter.prototype = new createjs.Filter();
 
 // パブリックプロパティ:
-	/**
-	 * 赤チャンネルに乗算する値です。
-	 * @property redMultiplier
-	 * @type Number
-	 **/
-	p.redMultiplier = 1;
+	p.matrix = null;
 	
-	/** 
-	 * 緑チャンネルに乗算する値です。
-	 * @property greenMultiplier
-	 * @type Number
-	 **/
-	p.greenMultiplier = 1;
-	
-	/**
-	 * 青チャンネルに乗算する値です。
-	 * @property blueMultiplier
-	 * @type Number
-	 **/
-	p.blueMultiplier = 1;
-	
-	/**
-	 * アルファチャンネルに乗算する値です。
-	 * @property redMultiplier
-	 * @type Number
-	 **/
-	p.alphaMultiplier = 1;
-	
-	/**
-	 * 赤チャンネルに加算する値です。（計算後の値に加算されます）
-	 * @property redOffset
-	 * @type Number
-	 **/
-	p.redOffset = 0;
-	
-	/**
-	 * 緑チャンネルに加算する値です。（計算後の値に加算されます）
-	 * @property greenOffset
-	 * @type Number
-	 **/
-	p.greenOffset = 0;
-	
-	/**
-	 * 青チャンネルに加算する値です。（計算後の値に加算されます）
-	 * @property blueOffset
-	 * @type Number
-	 **/
-	p.blueOffset = 0;
-	
-	/**
-	 * アルファチャンネルに加算する値です。（計算後の値に加算されます）
-	 * @property alphaOffset
-	 * @type Number
-	 **/
-	p.alphaOffset = 0;
-
 // コンストラクタ:
-	/**
-	 * 初期化用のメソッドです。
+	// TODO: detailed docs.
+	/** 
 	 * @method initialize
 	 * @protected
+	 * @param {Array} matrix 実行すべき色への操作が記述された 4x5 行列です。
 	 **/
-	p.initialize = function(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
-		this.redMultiplier = redMultiplier != null ? redMultiplier : 1;
-		this.greenMultiplier = greenMultiplier != null ? greenMultiplier : 1;
-		this.blueMultiplier = blueMultiplier != null ? blueMultiplier : 1;
-		this.alphaMultiplier = alphaMultiplier != null ? alphaMultiplier : 1;
-		this.redOffset = redOffset || 0;
-		this.greenOffset = greenOffset || 0;
-		this.blueOffset = blueOffset || 0;
-		this.alphaOffset = alphaOffset || 0;
+	p.initialize = function(matrix) {
+		this.matrix = matrix;
 	}
 
 // パブリックメソッド:
@@ -152,11 +86,22 @@ var p = ColorFilter.prototype = new createjs.Filter();
 		}
 		var data = imageData.data;
 		var l = data.length;
+		var r,g,b,a;
+		var mtx = this.matrix;
+		var m0 =  mtx[0],  m1 =  mtx[1],  m2 =  mtx[2],  m3 =  mtx[3],  m4 =  mtx[4];
+		var m5 =  mtx[5],  m6 =  mtx[6],  m7 =  mtx[7],  m8 =  mtx[8],  m9 =  mtx[9];
+		var m10 = mtx[10], m11 = mtx[11], m12 = mtx[12], m13 = mtx[13], m14 = mtx[14];
+		var m15 = mtx[15], m16 = mtx[16], m17 = mtx[17], m18 = mtx[18], m19 = mtx[19];
+		
 		for (var i=0; i<l; i+=4) {
-			data[i] = data[i]*this.redMultiplier+this.redOffset;
-			data[i+1] = data[i+1]*this.greenMultiplier+this.greenOffset;
-			data[i+2] = data[i+2]*this.blueMultiplier+this.blueOffset;
-			data[i+3] = data[i+3]*this.alphaMultiplier+this.alphaOffset;
+			r = data[i];
+			g = data[i+1];
+			b = data[i+2];
+			a = data[i+3];
+			data[i] = r*m0+g*m1+b*m2+a*m3+m4; // red
+			data[i+1] = r*m5+g*m6+b*m7+a*m8+m9; // green
+			data[i+2] = r*m10+g*m11+b*m12+a*m13+m14; // blue
+			data[i+3] = r*m15+g*m16+b*m17+a*m18+m19; // alpha
 		}
 		imageData.data = data;
 		targetCtx.putImageData(imageData, targetX, targetY);
@@ -169,18 +114,18 @@ var p = ColorFilter.prototype = new createjs.Filter();
 	 * @return {String} このオブジェクトの文字列表現です。
 	 **/
 	p.toString = function() {
-		return "[ColorFilter]";
+		return "[ColorMatrixFilter]";
 	}
-
-
+	
+	
 	/**
 	 * このオブジェクトの複製を返します。
 	 * @method clone
 	 * @return {ColorFilter} 現在の ColorFilter インスタンスの複製です。
 	 **/
 	p.clone = function() {
-		return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
+		return new ColorMatrixFilter(this.matrix);
 	}
-
-createjs.ColorFilter = ColorFilter;
+	
+createjs.ColorMatrixFilter = ColorMatrixFilter;
 }());
