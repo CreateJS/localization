@@ -31,7 +31,7 @@
  * @module SoundJS
  */
 
-// namespace:zz
+// namespace:
 this.createjs = this.createjs || {};
 
 (function () {
